@@ -25,4 +25,9 @@ public class SystemUser {
         this.userNm = requestDto.getUserNm();
         this.userAuth = requestDto.getUserAuth();
     }
+
+    // 회원 이름 수정
+    public void updateUserName(String userNm) {
+        this.userNm = userNm;
+    }
 }

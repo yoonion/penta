@@ -1,8 +1,6 @@
 package com.task.penta.controller;
 
-import com.task.penta.dto.SystemUserCreateRequestDto;
-import com.task.penta.dto.SystemUserCreateResponseDto;
-import com.task.penta.dto.SystemUserSearchResponseDto;
+import com.task.penta.dto.*;
 import com.task.penta.service.SystemUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,5 +42,18 @@ public class SystemUserController {
         SystemUserCreateResponseDto createdUser = systemUserService.createUser(requestDto);
 
         return ResponseEntity.ok(createdUser);
+    }
+
+    /**
+     * 회원 수정 API
+     * @param requestDto 회원 수정에 필요한 정보가 담긴 DTO.
+     *                   JSON 형식으로 userId, userNm(수정할 이름)을 요청 body에 포함해야 합니다.
+     * @return 수정된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserUpdateResponseDto 형식입니다.
+     */
+    @PutMapping
+    public ResponseEntity<SystemUserUpdateResponseDto> updateUser(@RequestBody SystemUserUpdateRequestDto requestDto) {
+        SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(requestDto);
+
+        return ResponseEntity.ok(updatedUser);
     }
 }

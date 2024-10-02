@@ -1,19 +1,18 @@
 package com.task.penta.service;
 
-import com.task.penta.dto.SystemUserCreateRequestDto;
-import com.task.penta.dto.SystemUserCreateResponseDto;
-import com.task.penta.dto.SystemUserSearchResponseDto;
+import com.task.penta.dto.*;
 import com.task.penta.entity.SystemUser;
 import com.task.penta.repository.SystemUserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class SystemUserService {
 
     private final SystemUserRepository systemUserRepository;
@@ -52,5 +51,22 @@ public class SystemUserService {
         SystemUser savedSystemUser = systemUserRepository.save(systemUser);
 
         return new SystemUserCreateResponseDto(savedSystemUser);
+    }
+
+    @Transactional
+    public SystemUserUpdateResponseDto updateUser(SystemUserUpdateRequestDto requestDto) {
+        String userId = requestDto.getUserId();
+        List<SystemUser> findUser = systemUserRepository.findByUserId(userId);
+
+        // 존재하는 회원인지 확인
+        if (findUser.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 회원ID 입니다.");
+        }
+
+        // 회원 이름 수정
+        SystemUser user = findUser.get(0);
+        user.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
+
+        return new SystemUserUpdateResponseDto(user);
     }
 }
