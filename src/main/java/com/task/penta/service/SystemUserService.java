@@ -71,7 +71,15 @@ public class SystemUserService {
     }
 
     @Transactional
-    public void deleteUser(String userId) {
+    public SystemUserDeleteResponseDto deleteUser(String userId) {
+        // 존재하는 회원인지 확인
+        List<SystemUser> findUser = systemUserRepository.findByUserId(userId);
+        if (findUser.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 회원ID 입니다.");
+        }
 
+        systemUserRepository.deleteByUserId(userId);
+
+        return new SystemUserDeleteResponseDto(userId);
     }
 }

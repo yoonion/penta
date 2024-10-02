@@ -12,4 +12,6 @@ public interface SystemUserRepository extends JpaRepository<SystemUser, Integer>
     List<SystemUser> findByUserId(String userId);
 
     List<SystemUser> findByUserNm(String userNm);
+
+    void deleteByUserId(String userId);
 }
