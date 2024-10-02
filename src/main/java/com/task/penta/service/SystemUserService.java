@@ -1,5 +1,6 @@
 package com.task.penta.service;
 
+import com.task.penta.dto.SystemUserCreateRequestDto;
 import com.task.penta.dto.SystemUserSearchResponseDto;
 import com.task.penta.entity.SystemUser;
 import com.task.penta.repository.SystemUserRepository;
@@ -34,5 +35,9 @@ public class SystemUserService {
         return users.stream()
                 .map(SystemUserSearchResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public void createUser(SystemUserCreateRequestDto requestDto) {
+
     }
 }
