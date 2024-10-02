@@ -41,6 +41,13 @@ public class SystemUserService {
 
     @Transactional
     public SystemUserCreateResponseDto createUser(SystemUserCreateRequestDto requestDto) {
+        // 아이디 중복 검증
+        String userId = requestDto.getUserId();
+        List<SystemUser> findUser = systemUserRepository.findByUserId(userId);
+        if(!findUser.isEmpty()) {
+            throw new IllegalArgumentException("중복된 회원 ID 입니다.");
+        }
+
         SystemUser systemUser = new SystemUser(requestDto);
         SystemUser savedSystemUser = systemUserRepository.save(systemUser);
 
