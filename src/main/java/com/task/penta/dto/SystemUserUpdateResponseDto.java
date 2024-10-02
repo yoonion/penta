@@ -1,11 +1,15 @@
 package com.task.penta.dto;
 
+import com.task.penta.entity.SystemUser;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class SystemUserUpdateResponseDto {
     private final String userId;
     private final String userNm;
+
+    public SystemUserUpdateResponseDto(SystemUser user) {
+        this.userId = user.getUserId();
+        this.userNm = user.getUserNm();
+    }
 }
