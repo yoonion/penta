@@ -3,6 +3,7 @@ package com.task.penta.service;
 import com.task.penta.dto.SystemUserCreateRequestDto;
 import com.task.penta.dto.SystemUserCreateResponseDto;
 import com.task.penta.dto.SystemUserSearchResponseDto;
+import com.task.penta.dto.SystemUserUpdateRequestDto;
 import com.task.penta.entity.SystemUser;
 import com.task.penta.repository.SystemUserRepository;
 import jakarta.transaction.Transactional;
@@ -52,5 +53,9 @@ public class SystemUserService {
         SystemUser savedSystemUser = systemUserRepository.save(systemUser);
 
         return new SystemUserCreateResponseDto(savedSystemUser);
+    }
+
+    public void updateUser(SystemUserUpdateRequestDto requestDto) {
+
     }
 }
