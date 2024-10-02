@@ -1,8 +1,11 @@
 package com.task.penta.service;
 
+import com.task.penta.dto.SystemUserCreateRequestDto;
+import com.task.penta.dto.SystemUserCreateResponseDto;
 import com.task.penta.dto.SystemUserSearchResponseDto;
 import com.task.penta.entity.SystemUser;
 import com.task.penta.repository.SystemUserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +37,20 @@ public class SystemUserService {
         return users.stream()
                 .map(SystemUserSearchResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public SystemUserCreateResponseDto createUser(SystemUserCreateRequestDto requestDto) {
+        // 아이디 중복 검증
+        String userId = requestDto.getUserId();
+        List<SystemUser> findUser = systemUserRepository.findByUserId(userId);
+        if(!findUser.isEmpty()) {
+            throw new IllegalArgumentException("중복된 회원 ID 입니다.");
+        }
+
+        SystemUser systemUser = new SystemUser(requestDto);
+        SystemUser savedSystemUser = systemUserRepository.save(systemUser);
+
+        return new SystemUserCreateResponseDto(savedSystemUser);
     }
 }
