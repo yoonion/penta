@@ -42,7 +42,7 @@ public class SystemUserService {
     public SystemUserCreateResponseDto createUser(SystemUserCreateRequestDto requestDto) {
         // 아이디 중복 검증
         String userId = requestDto.getUserId();
-        List<SystemUser> findUser = systemUserRepository.findByUserId(userId);
+        List<SystemUser> findUser = findByUserId(userId);
         if(!findUser.isEmpty()) {
             throw new IllegalArgumentException("중복된 회원 ID 입니다.");
         }
@@ -56,7 +56,7 @@ public class SystemUserService {
     @Transactional
     public SystemUserUpdateResponseDto updateUser(SystemUserUpdateRequestDto requestDto) {
         String userId = requestDto.getUserId();
-        List<SystemUser> findUser = systemUserRepository.findByUserId(userId);
+        List<SystemUser> findUser = findByUserId(userId);
 
         // 존재하는 회원인지 확인
         if (findUser.isEmpty()) {
@@ -68,5 +68,22 @@ public class SystemUserService {
         user.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
 
         return new SystemUserUpdateResponseDto(user);
+    }
+
+    @Transactional
+    public SystemUserDeleteResponseDto deleteUser(String userId) {
+        // 존재하는 회원인지 확인
+        List<SystemUser> findUser = findByUserId(userId);
+        if (findUser.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 회원ID 입니다.");
+        }
+
+        systemUserRepository.deleteByUserId(userId);
+
+        return new SystemUserDeleteResponseDto(userId);
+    }
+
+    private List<SystemUser> findByUserId(String userId) {
+        return systemUserRepository.findByUserId(userId);
     }
 }

@@ -56,4 +56,16 @@ public class SystemUserController {
 
         return ResponseEntity.ok(updatedUser);
     }
+
+    /**
+     * 회원 삭제 API
+     * @param userId 삭제할 회원 ID. PathVariable로 입력받아 해당 회원을 삭제합니다.
+     * @return 삭제된 회원의 ID를 JSON 형식으로 응답합니다.
+     */
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+        SystemUserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId);
+
+        return ResponseEntity.ok(deletedUser);
+    }
 }
