@@ -69,4 +69,9 @@ public class SystemUserService {
 
         return new SystemUserUpdateResponseDto(user);
     }
+
+    @Transactional
+    public void deleteUser(String userId) {
+
+    }
 }

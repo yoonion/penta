@@ -56,4 +56,11 @@ public class SystemUserController {
 
         return ResponseEntity.ok(updatedUser);
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+        systemUserService.deleteUser(userId);
+
+        return ResponseEntity.ok(null);
+    }
 }
