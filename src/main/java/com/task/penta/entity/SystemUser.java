@@ -1,10 +1,13 @@
 package com.task.penta.entity;
 
+import com.task.penta.dto.SystemUserCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "SYSTEM_USER")
+@NoArgsConstructor
 @Getter
 public class SystemUser {
     @Id
@@ -15,4 +18,11 @@ public class SystemUser {
     private String userPw;
     private String userNm;
     private String userAuth;
+
+    public SystemUser(SystemUserCreateRequestDto requestDto) {
+        this.userId = requestDto.getUserId();
+        this.userPw = requestDto.getUserPw();
+        this.userNm = requestDto.getUserNm();
+        this.userAuth = requestDto.getUserAuth();
+    }
 }

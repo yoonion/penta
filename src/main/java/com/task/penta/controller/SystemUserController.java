@@ -1,6 +1,7 @@
 package com.task.penta.controller;
 
 import com.task.penta.dto.SystemUserCreateRequestDto;
+import com.task.penta.dto.SystemUserCreateResponseDto;
 import com.task.penta.dto.SystemUserSearchResponseDto;
 import com.task.penta.service.SystemUserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class SystemUserController {
             @RequestParam(required = false) String userId,
             @RequestParam(required = false) String userNm) {
         List<SystemUserSearchResponseDto> users = systemUserService.getUsers(userId, userNm);
+
         return ResponseEntity.ok(users);
     }
 
@@ -30,8 +32,9 @@ public class SystemUserController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody SystemUserCreateRequestDto requestDto) {
-        systemUserService.createUser(requestDto);
-        return null;
+    public ResponseEntity<SystemUserCreateResponseDto> createUser(@RequestBody SystemUserCreateRequestDto requestDto) {
+        SystemUserCreateResponseDto createdUser = systemUserService.createUser(requestDto);
+
+        return ResponseEntity.ok(createdUser);
     }
 }

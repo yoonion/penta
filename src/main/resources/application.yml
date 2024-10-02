@@ -16,8 +16,8 @@ spring:
         format_sql: true # sql 가독성 있게 출력
         show_sql: true
 
-logging:
-  level:
-    org.hibernate:
-      type.descriptor.sql: trace
-      SQL: DEBUG
+#logging:
+#  level:
+#    org.hibernate:
+#      type.descriptor.sql: trace
+#      SQL: DEBUG

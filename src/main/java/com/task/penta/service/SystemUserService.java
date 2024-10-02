@@ -1,9 +1,11 @@
 package com.task.penta.service;
 
 import com.task.penta.dto.SystemUserCreateRequestDto;
+import com.task.penta.dto.SystemUserCreateResponseDto;
 import com.task.penta.dto.SystemUserSearchResponseDto;
 import com.task.penta.entity.SystemUser;
 import com.task.penta.repository.SystemUserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,11 @@ public class SystemUserService {
                 .collect(Collectors.toList());
     }
 
-    public void createUser(SystemUserCreateRequestDto requestDto) {
+    @Transactional
+    public SystemUserCreateResponseDto createUser(SystemUserCreateRequestDto requestDto) {
+        SystemUser systemUser = new SystemUser(requestDto);
+        SystemUser savedSystemUser = systemUserRepository.save(systemUser);
 
+        return new SystemUserCreateResponseDto(savedSystemUser);
     }
 }
