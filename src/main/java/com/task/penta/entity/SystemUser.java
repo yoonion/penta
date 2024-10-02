@@ -1,8 +1,11 @@
 package com.task.penta.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Table(name = "SYSTEM_USER")
+@Getter
 public class SystemUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
