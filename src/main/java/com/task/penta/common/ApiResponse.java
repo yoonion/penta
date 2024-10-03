@@ -1,5 +1,6 @@
 package com.task.penta.common;
 
+import com.task.penta.exception.ErrorCode;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -49,8 +50,8 @@ public class ApiResponse<T> {
         return new ApiResponse<>(FAIL_STATUS, null, errors);
     }
 
-    // 예외 발생으로 API 호출 실패시 반환
+    // 예외 발생으로 API 호출 실패 시 반환 (메시지 기반)
     public static ApiResponse<?> createError(String message) {
-        return new ApiResponse<>(ERROR_STATUS, message, null);
+        return new ApiResponse<>(FAIL_STATUS, message, null);
     }
 }
