@@ -8,15 +8,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SystemUserCreateRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "회원 아이디를 입력해주세요.")
     private final String userId;
 
-    @NotBlank
+    @NotBlank(message = "회원 비밀번호를 입력해주세요.")
     private final String userPw;
 
-    @NotBlank
+    @NotBlank(message = "회원 이름을 입력해주세요.")
     private final String userNm;
 
-    @NotBlank
+    @NotBlank(message = "회원 권한을 입력해주세요.")
     private final String userAuth;
 }

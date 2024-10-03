@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SystemUserUpdateRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "수정할 회원의 아이디를 입력해주세요.")
     private final String userId;
 
-    @NotBlank
+    @NotBlank(message = "수정할 회원의 이름을 입력해주세요.")
     private final String userNm;
 }
