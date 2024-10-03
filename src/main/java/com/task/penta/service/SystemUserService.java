@@ -2,6 +2,8 @@ package com.task.penta.service;
 
 import com.task.penta.dto.*;
 import com.task.penta.entity.SystemUser;
+import com.task.penta.exception.CustomException;
+import com.task.penta.exception.ErrorCode;
 import com.task.penta.repository.SystemUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,7 @@ public class SystemUserService {
         String userId = requestDto.getUserId();
         List<SystemUser> findUser = findByUserId(userId);
         if(!findUser.isEmpty()) {
-            throw new IllegalArgumentException("중복된 회원 ID 입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_USER_ID);
         }
 
         SystemUser systemUser = new SystemUser(requestDto);
@@ -60,7 +62,7 @@ public class SystemUserService {
 
         // 존재하는 회원인지 확인
         if (findUser.isEmpty()) {
-            throw new IllegalArgumentException("존재하지 않는 회원ID 입니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         // 회원 이름 수정
@@ -75,7 +77,7 @@ public class SystemUserService {
         // 존재하는 회원인지 확인
         List<SystemUser> findUser = findByUserId(userId);
         if (findUser.isEmpty()) {
-            throw new IllegalArgumentException("존재하지 않는 회원ID 입니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         systemUserRepository.deleteByUserId(userId);
