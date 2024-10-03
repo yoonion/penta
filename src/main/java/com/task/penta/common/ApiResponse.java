@@ -16,9 +16,9 @@ public class ApiResponse<T> {
     private static final String FAIL_STATUS = "fail";
     private static final String ERROR_STATUS = "error";
 
-    private String status;
-    private String message;
-    private T data;
+    private final String status;
+    private final String message;
+    private final T data;
 
     private ApiResponse(String status, String message, T data) {
         this.status = status;
@@ -43,7 +43,7 @@ public class ApiResponse<T> {
             if (error instanceof FieldError) {
                 errors.put(((FieldError) error).getField(), error.getDefaultMessage());
             } else {
-                errors.put( error.getObjectName(), error.getDefaultMessage());
+                errors.put(error.getObjectName(), error.getDefaultMessage());
             }
         }
         return new ApiResponse<>(FAIL_STATUS, null, errors);

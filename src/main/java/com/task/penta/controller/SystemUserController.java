@@ -1,5 +1,6 @@
 package com.task.penta.controller;
 
+import com.task.penta.common.ApiResponse;
 import com.task.penta.dto.*;
 import com.task.penta.service.SystemUserService;
 import jakarta.validation.Valid;
@@ -24,12 +25,12 @@ public class SystemUserController {
      * @return 조회된 회원 정보의 리스트를 JSON 형식으로 응답합니다. List<SystemUserSearchResponseDto> 형식입니다.
      */
     @GetMapping
-    public ResponseEntity<List<SystemUserSearchResponseDto>> getUsers(
+    public ApiResponse<List<SystemUserSearchResponseDto>> getUsers(
             @RequestParam(required = false) String userId,
             @RequestParam(required = false) String userNm) {
         List<SystemUserSearchResponseDto> users = systemUserService.getUsers(userId, userNm);
 
-        return ResponseEntity.ok(users);
+        return ApiResponse.createSuccess(users);
     }
 
     /**
@@ -39,10 +40,10 @@ public class SystemUserController {
      * @return 추가된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserCreateResponseDto 형식입니다.
      */
     @PostMapping
-    public ResponseEntity<SystemUserCreateResponseDto> createUser(@Valid @RequestBody SystemUserCreateRequestDto requestDto) {
+    public ApiResponse<SystemUserCreateResponseDto> createUser(@Valid @RequestBody SystemUserCreateRequestDto requestDto) {
         SystemUserCreateResponseDto createdUser = systemUserService.createUser(requestDto);
 
-        return ResponseEntity.ok(createdUser);
+        return ApiResponse.createSuccess(createdUser);
     }
 
     /**
@@ -52,10 +53,10 @@ public class SystemUserController {
      * @return 수정된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserUpdateResponseDto 형식입니다.
      */
     @PutMapping
-    public ResponseEntity<SystemUserUpdateResponseDto> updateUser(@Valid @RequestBody SystemUserUpdateRequestDto requestDto) {
+    public ApiResponse<SystemUserUpdateResponseDto> updateUser(@Valid @RequestBody SystemUserUpdateRequestDto requestDto) {
         SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(requestDto);
 
-        return ResponseEntity.ok(updatedUser);
+        return ApiResponse.createSuccess(updatedUser);
     }
 
     /**
@@ -64,9 +65,9 @@ public class SystemUserController {
      * @return 삭제된 회원의 ID를 JSON 형식으로 응답합니다.
      */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+    public ApiResponse<SystemUserDeleteResponseDto> deleteUser(@PathVariable String userId) {
         SystemUserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId);
 
-        return ResponseEntity.ok(deletedUser);
+        return ApiResponse.createSuccess(deletedUser);
     }
 }

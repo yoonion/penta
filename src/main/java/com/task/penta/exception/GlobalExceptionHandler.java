@@ -1,5 +1,6 @@
 package com.task.penta.exception;
 
+import com.task.penta.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,19 +18,16 @@ public class GlobalExceptionHandler {
     // Bean validation exception
     @ExceptionHandler
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException e) {
-        BindingResult bindingResult = e.getBindingResult();
-        FieldError fieldError = bindingResult.getFieldError();
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(fieldError.getDefaultMessage());
+                .body(ApiResponse.createFail(e.getBindingResult()));
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handleIllegalArgumentExceptions(IllegalArgumentException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(e.getMessage());
+                .body(ApiResponse.createError(e.getMessage()));
     }
 
     // Interval exception
@@ -37,6 +35,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleExceptions(Exception e) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
+                .body(ApiResponse.createError(e.getMessage()));
     }
 }
