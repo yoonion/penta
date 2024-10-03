@@ -2,6 +2,7 @@ package com.task.penta.controller;
 
 import com.task.penta.dto.*;
 import com.task.penta.service.SystemUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class SystemUserController {
      * @return 추가된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserCreateResponseDto 형식입니다.
      */
     @PostMapping
-    public ResponseEntity<SystemUserCreateResponseDto> createUser(@RequestBody SystemUserCreateRequestDto requestDto) {
+    public ResponseEntity<SystemUserCreateResponseDto> createUser(@Valid @RequestBody SystemUserCreateRequestDto requestDto) {
         SystemUserCreateResponseDto createdUser = systemUserService.createUser(requestDto);
 
         return ResponseEntity.ok(createdUser);
@@ -51,7 +52,7 @@ public class SystemUserController {
      * @return 수정된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserUpdateResponseDto 형식입니다.
      */
     @PutMapping
-    public ResponseEntity<SystemUserUpdateResponseDto> updateUser(@RequestBody SystemUserUpdateRequestDto requestDto) {
+    public ResponseEntity<SystemUserUpdateResponseDto> updateUser(@Valid @RequestBody SystemUserUpdateRequestDto requestDto) {
         SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(requestDto);
 
         return ResponseEntity.ok(updatedUser);
