@@ -52,7 +52,7 @@ public class SystemUserController {
      * @return 수정된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserUpdateResponseDto 형식입니다.
      */
     @PutMapping
-    public ResponseEntity<SystemUserUpdateResponseDto> updateUser(@RequestBody SystemUserUpdateRequestDto requestDto) {
+    public ResponseEntity<SystemUserUpdateResponseDto> updateUser(@Valid @RequestBody SystemUserUpdateRequestDto requestDto) {
         SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(requestDto);
 
         return ResponseEntity.ok(updatedUser);
