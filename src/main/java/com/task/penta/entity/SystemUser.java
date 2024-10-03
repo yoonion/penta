@@ -19,11 +19,11 @@ public class SystemUser {
     private String userNm;
     private String userAuth;
 
-    public SystemUser(SystemUserCreateRequestDto requestDto) {
-        this.userId = requestDto.getUserId();
-        this.userPw = requestDto.getUserPw();
-        this.userNm = requestDto.getUserNm();
-        this.userAuth = requestDto.getUserAuth();
+    public SystemUser(String userId, String userPw, String userNm, String userAuth) {
+        this.userId = userId;
+        this.userPw = userPw;
+        this.userNm = userNm;
+        this.userAuth = userAuth;
     }
 
     // 회원 이름 수정

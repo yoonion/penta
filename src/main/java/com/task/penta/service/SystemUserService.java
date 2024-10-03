@@ -6,6 +6,7 @@ import com.task.penta.exception.CustomException;
 import com.task.penta.exception.ErrorCode;
 import com.task.penta.repository.SystemUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class SystemUserService {
 
     private final SystemUserRepository systemUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<SystemUserSearchResponseDto> getUsers(String userId, String userNm) {
         List<SystemUser> users;
@@ -49,8 +51,11 @@ public class SystemUserService {
             throw new CustomException(ErrorCode.DUPLICATE_USER_ID);
         }
 
-        SystemUser systemUser = new SystemUser(requestDto);
-        SystemUser savedSystemUser = systemUserRepository.save(systemUser);
+        String userNm = requestDto.getUserNm();
+        String userPw = passwordEncoder.encode(requestDto.getUserPw()); // 비밀번호 암호화
+        String userAuth = requestDto.getUserAuth();
+        SystemUser systemUser = new SystemUser(userId, userPw, userNm, userAuth);
+        SystemUser savedSystemUser = systemUserRepository.save(systemUser); // 유저 정보 저장
 
         return new SystemUserCreateResponseDto(savedSystemUser);
     }
