@@ -1,80 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .login-container h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .form-group input:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-        .submit-btn:hover {
-            background-color: #218838;
-        }
-        .register-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .register-link a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/common.css}"> <!-- 공통 CSS 파일 링크 -->
+    <link rel="stylesheet" th:href="@{/css/login.css}"> <!-- 로그인 CSS 파일 링크 -->
 </head>
 <body>
-<div class="login-container">
+<div class="container login-container">
     <h1>로그인</h1>
     <form id="loginForm" action="/api/user/login" method="POST">
         <div class="form-group">
@@ -93,22 +27,6 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('loginForm').addEventListener('submit', async function(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
-
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-
-        // 입력값 검증
-        if (!username || !password) {
-            alert('아이디와 비밀번호를 모두 입력해주세요.');
-            return;
-        }
-
-        // form action을 통한 폼 제출
-        this.submit();
-    });
-</script>
+<script th:src="@{/js/login.js}"></script> <!-- 로그인 JavaScript 파일 링크 -->
 </body>
 </html>
