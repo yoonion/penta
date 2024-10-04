@@ -3,6 +3,7 @@ package com.task.penta.config;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,13 +24,16 @@ public class WebSecurityConfig {
         // CSRF 설정
         http.csrf((csrf) -> csrf.disable());
 
+        // 인증 설정
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                        .requestMatchers("/user/signup").permitAll() // 회원가입 페이지 접근 허용
+                        .requestMatchers(HttpMethod.POST, "/api/system-users").permitAll() // 회원가입 POST 요청 API 접근 허용
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
-        // 로그인 사용
+        // 로그인 설정
         http.formLogin((formLogin) ->
                 formLogin
                         // 커스텀 로그인 View 설정 (GET /user/login)

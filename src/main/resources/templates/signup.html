@@ -60,16 +60,6 @@
         .submit-btn:hover {
             background-color: #0056b3;
         }
-        .error-message {
-            color: red;
-            margin-top: 10px;
-            text-align: center;
-        }
-        .success-message {
-            color: green;
-            margin-top: 10px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -117,9 +107,8 @@
             });
 
             if (response.ok) {
-                const data = await response.json();
                 alert('회원 가입이 성공적으로 완료되었습니다!');
-                // 추가 작업 (예: 리다이렉션)
+                window.location.href = '/user/login' // 가입 성공 시, 회원가입 페이지로 리다이렉트
             } else {
                 const errorData = await response.json();
                 alert('회원 가입에 실패했습니다.', errorData.message);
