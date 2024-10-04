@@ -40,7 +40,7 @@ public class JwtUtil {
     }
 
     // JWT 생성
-    public String createToken(String username, SystemUserRoleEnum role) {
+    public String createToken(String username, String role) {
         Date date = new Date();
 
         return BEARER_PREFIX +
