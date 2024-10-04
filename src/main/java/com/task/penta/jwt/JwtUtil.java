@@ -1,6 +1,5 @@
 package com.task.penta.jwt;
 
-import com.task.penta.entity.SystemUserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

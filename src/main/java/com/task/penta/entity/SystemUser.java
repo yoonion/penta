@@ -1,6 +1,5 @@
 package com.task.penta.entity;
 
-import com.task.penta.dto.SystemUserCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
