@@ -21,3 +21,7 @@ spring:
 #    org.hibernate:
 #      type.descriptor.sql: trace
 #      SQL: DEBUG
+
+jwt:
+  secret:
+    key: 6rmA7IOB7Jykand07Iuc7YGs66a/7YKkYmFzZTY07J247L2U65Sp7ZWp64uI64uk6riw7Iig6rO87KCc

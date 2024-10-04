@@ -1,19 +1,17 @@
-package com.task.penta.controller;
+package com.task.penta.controller.api;
 
 import com.task.penta.common.ApiResponse;
 import com.task.penta.dto.*;
 import com.task.penta.service.SystemUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/system-users")
+@RequestMapping("/api/system-users")
 public class SystemUserController {
 
     private final SystemUserService systemUserService;

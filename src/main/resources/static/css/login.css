@@ -1,0 +1,12 @@
+/* /static/css/login.css */
+.login-container {
+    background-color: white;
+}
+
+.submit-btn {
+    background-color: #28a745;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+}
