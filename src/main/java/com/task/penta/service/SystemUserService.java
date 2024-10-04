@@ -2,6 +2,7 @@ package com.task.penta.service;
 
 import com.task.penta.dto.*;
 import com.task.penta.entity.SystemUser;
+import com.task.penta.entity.SystemUserRoleEnum;
 import com.task.penta.exception.CustomException;
 import com.task.penta.exception.ErrorCode;
 import com.task.penta.repository.SystemUserRepository;
@@ -53,7 +54,8 @@ public class SystemUserService {
 
         String userNm = requestDto.getUserNm();
         String userPw = passwordEncoder.encode(requestDto.getUserPw()); // 비밀번호 암호화
-        String userAuth = requestDto.getUserAuth();
+        // String userAuth = requestDto.getUserAuth();
+        String userAuth = SystemUserRoleEnum.USER.getAuthority(); // 일반 회원만 가입이 가능하도록 설정
         SystemUser systemUser = new SystemUser(userId, userPw, userNm, userAuth);
         SystemUser savedSystemUser = systemUserRepository.save(systemUser); // 유저 정보 저장
 

@@ -1,13 +1,134 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 가입</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .signup-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .signup-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .success-message {
+            color: green;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    회원가입 페이지
+<div class="signup-container">
+    <h1>회원 가입</h1>
+    <form id="signupForm">
+        <div class="form-group">
+            <label for="userNm">회원 이름</label>
+            <input type="text" id="userNm" name="userNm" required>
+        </div>
+        <div class="form-group">
+            <label for="userId">아이디</label>
+            <input type="text" id="userId" name="userId" required>
+        </div>
+        <div class="form-group">
+            <label for="userPw">비밀번호</label>
+            <input type="password" id="userPw" name="userPw" required>
+        </div>
+        <button type="button" id="registerBtn" class="submit-btn">가입하기</button>
+        <div id="message"></div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registerBtn').addEventListener('click', async function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        const userNm = document.getElementById('userNm').value.trim();
+        const userId = document.getElementById('userId').value.trim();
+        const userPw = document.getElementById('userPw').value;
+
+        // 입력값 검증
+        if (!userId || !userPw || !userNm) {
+            alert('이름, 아이디, 비밀번호를 모두 입력해주세요.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8080/api/system-users', { // 실제 REST API 엔드포인트로 변경
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId, userPw, userNm })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert('회원 가입이 성공적으로 완료되었습니다!');
+                // 추가 작업 (예: 리다이렉션)
+            } else {
+                const errorData = await response.json();
+                alert('회원 가입에 실패했습니다.', errorData.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('서버와의 통신 중 문제가 발생했습니다.');
+        }
+    });
+</script>
 </body>
 </html>
