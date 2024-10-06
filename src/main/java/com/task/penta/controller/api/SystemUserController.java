@@ -45,14 +45,16 @@ public class SystemUserController {
     }
 
     /**
-     * 회원 수정 API
-     * @param requestDto 회원 수정에 필요한 정보가 담긴 DTO.
-     *                   JSON 형식으로 userId, userNm(수정할 이름)을 요청 body에 포함해야 합니다.
-     * @return 수정된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserUpdateResponseDto 형식입니다.
+     * 회원 수정
+     * @param userId 수정할 회원의 ID. PathVariable로 입력받아 해당 회원을 수정합니다.
+     * @param requestDto 수정할 회원의 이름을 요청받습니다.
+     * @return
      */
-    @PutMapping
-    public ApiResponse<SystemUserUpdateResponseDto> updateUser(@Valid @RequestBody SystemUserUpdateRequestDto requestDto) {
-        SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(requestDto);
+    @PutMapping("/{userId}")
+    public ApiResponse<SystemUserUpdateResponseDto> updateUser(
+            @PathVariable String userId,
+            @Valid @RequestBody SystemUserUpdateRequestDto requestDto) {
+        SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto);
 
         return ApiResponse.createSuccess(updatedUser);
     }

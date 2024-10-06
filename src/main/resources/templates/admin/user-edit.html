@@ -6,7 +6,6 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>회원 상세 정보</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" /> <!-- CSS 파일 연결 -->
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -39,17 +38,17 @@
         }
 
         // 수정 API 요청
-        fetch('/api/system-users', {
+        fetch('/api/system-users/' + userId, {
             method: 'PUT', // 수정 요청
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: userId, userNm: updateName }) // JSON 형태로 보냄
+            body: JSON.stringify({ userNm: updateName }) // JSON 형태로 보냄
         })
             .then(response => {
                 if (response.ok) {
                     alert('수정되었습니다.');
-                    location.reload(); // 현재 페이지 새로고침
+                    location.href = '/admin/users/' + userId; // 회원 상세 페이지로 이동
                 } else {
                     alert('수정 실패.');
                 }
