@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,12 +26,12 @@ class SystemUserServiceTest {
     @Autowired
     private SystemUserRepository systemUserRepository;
 
-    /**
-     * 일반 회원 1, admin 회원 1 생성 테스트
-     */
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
-    @DisplayName("일반 회원 및 관리자 회원 생성 테스트")
-    void createUserTest() {
+    @DisplayName("일반 회원 생성 테스트")
+    void createNormalUserTest() {
         // Mock HttpServletRequest
         HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
 
@@ -51,5 +52,25 @@ class SystemUserServiceTest {
         assertThat(savedNormalUser.getUserId()).isEqualTo("normalUser");
         assertThat(savedNormalUser.getUserNm()).isEqualTo("테스트일반회원");
         assertThat(savedNormalUser.getUserAuth()).isEqualTo("SYSTEM_USER");
+    }
+
+    @Test
+    @DisplayName("관리자 생성 테스트")
+    void createAdminUserTest() {
+
+        // admin 회원 생성
+        SystemUser adminUser = new SystemUser(
+                "admintest",
+                passwordEncoder.encode("1234"),
+                "관리자테스트유저",
+                "SYSTEM_ADMIN"
+        );
+
+        SystemUser savedAdminUser = systemUserRepository.save(adminUser);
+
+        // 검증
+        assertThat(savedAdminUser.getUserId()).isEqualTo("admintest");
+        assertThat(savedAdminUser.getUserNm()).isEqualTo("관리자테스트유저");
+        assertThat(savedAdminUser.getUserAuth()).isEqualTo("SYSTEM_ADMIN");
     }
 }
