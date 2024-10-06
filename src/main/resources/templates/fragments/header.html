@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+    <div th:fragment="header">
+        <header>
+            <nav>
+                <ul style="list-style: none; display: flex; gap: 20px; align-items: center;">
+                    <!-- 메인 페이지 버튼 -->
+                    <li>
+                        <a th:href="@{/}" style="text-decoration: none; font-weight: bold;">메인 페이지</a>
+                    </li>
+
+                    <!-- 인증된 사용자에게만 표시 -->
+                    <li sec:authorize="isAuthenticated()">
+                        <span sec:authentication="name"></span>님, 환영합니다
+                    </li>
+
+                    <!-- 로그아웃 버튼 -->
+                    <li sec:authorize="isAuthenticated()">
+                        <button type="button" style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline;">
+                            로그아웃
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+</body>
+</html>
