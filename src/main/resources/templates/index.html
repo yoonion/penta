@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,6 +8,10 @@
     <title>Document</title>
 </head>
 <body>
-    index 페이지
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <!-- SYSTEM_ADMIN 권한을 가지고 있다면 보임 -->
+    <div sec:authorize="hasAuthority('SYSTEM_ADMIN')"><a href="#">회원 목록</a></div>
+
 </body>
 </html>
