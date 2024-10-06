@@ -20,7 +20,7 @@
     </div>
 
     <div class="action-buttons">
-        <button class="btn edit-btn">수정</button>
+        <button class="btn edit-btn" th:onclick="location.href='/admin/users/edit/' + [[${user.userId}]]">수정</button>
         <button class="btn delete-btn" th:onclick="deleteUser([[${user.userId}]])">삭제</button>
     </div>
 </main>

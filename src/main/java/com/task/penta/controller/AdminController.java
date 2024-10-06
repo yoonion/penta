@@ -1,7 +1,6 @@
 package com.task.penta.controller;
 
 import com.task.penta.dto.SystemUserSearchResponseDto;
-import com.task.penta.entity.SystemUser;
 import com.task.penta.service.SystemUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -39,5 +38,16 @@ public class AdminController {
         model.addAttribute("user", users.get(0));
 
         return "admin/user-detail";
+    }
+
+    /**
+     * 회원 수정 페이지
+     */
+    @GetMapping("/users/edit/{userId}")
+    public String editUser(@PathVariable String userId, Model model) {
+        List<SystemUserSearchResponseDto> users = systemUserService.getUsers(userId, "");
+        model.addAttribute("user", users.get(0));
+
+        return "admin/user-edit";
     }
 }
