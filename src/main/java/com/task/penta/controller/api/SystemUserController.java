@@ -3,6 +3,7 @@ package com.task.penta.controller.api;
 import com.task.penta.common.ApiResponse;
 import com.task.penta.dto.*;
 import com.task.penta.service.SystemUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,10 @@ public class SystemUserController {
      * @return 추가된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserCreateResponseDto 형식입니다.
      */
     @PostMapping
-    public ApiResponse<SystemUserCreateResponseDto> createUser(@Valid @RequestBody SystemUserCreateRequestDto requestDto) {
-        SystemUserCreateResponseDto createdUser = systemUserService.createUser(requestDto);
+    public ApiResponse<SystemUserCreateResponseDto> createUser(
+            @Valid @RequestBody SystemUserCreateRequestDto requestDto,
+            HttpServletRequest request) {
+        SystemUserCreateResponseDto createdUser = systemUserService.createUser(requestDto, request);
 
         return ApiResponse.createSuccess(createdUser);
     }
@@ -48,13 +51,14 @@ public class SystemUserController {
      * 회원 수정
      * @param userId 수정할 회원의 ID. PathVariable로 입력받아 해당 회원을 수정합니다.
      * @param requestDto 수정할 회원의 이름을 요청받습니다.
-     * @return
+     * @return 수정된 회원의 ID, 이름을 JSON 형식으로 응답합니다.
      */
     @PutMapping("/{userId}")
     public ApiResponse<SystemUserUpdateResponseDto> updateUser(
             @PathVariable String userId,
-            @Valid @RequestBody SystemUserUpdateRequestDto requestDto) {
-        SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto);
+            @Valid @RequestBody SystemUserUpdateRequestDto requestDto,
+            HttpServletRequest request) {
+        SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto, request);
 
         return ApiResponse.createSuccess(updatedUser);
     }
@@ -65,8 +69,9 @@ public class SystemUserController {
      * @return 삭제된 회원의 ID를 JSON 형식으로 응답합니다.
      */
     @DeleteMapping("/{userId}")
-    public ApiResponse<SystemUserDeleteResponseDto> deleteUser(@PathVariable String userId) {
-        SystemUserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId);
+    public ApiResponse<SystemUserDeleteResponseDto> deleteUser(
+            @PathVariable String userId, HttpServletRequest request) {
+        SystemUserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, request);
 
         return ApiResponse.createSuccess(deletedUser);
     }

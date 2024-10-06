@@ -1,16 +1,22 @@
 package com.task.penta.service;
 
+import com.task.penta.common.CommonUtil;
 import com.task.penta.dto.*;
+import com.task.penta.entity.ActionTypeEnum;
 import com.task.penta.entity.SystemUser;
 import com.task.penta.entity.SystemUserRoleEnum;
+import com.task.penta.entity.UserHistory;
 import com.task.penta.exception.CustomException;
 import com.task.penta.exception.ErrorCode;
 import com.task.penta.repository.SystemUserRepository;
+import com.task.penta.repository.UserHistoryRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +26,7 @@ import java.util.stream.Collectors;
 public class SystemUserService {
 
     private final SystemUserRepository systemUserRepository;
+    private final UserHistoryRepository userHistoryRepository;
     private final PasswordEncoder passwordEncoder;
 
     public List<SystemUserSearchResponseDto> getUsers(String userId, String userNm) {
@@ -44,7 +51,7 @@ public class SystemUserService {
     }
 
     @Transactional
-    public SystemUserCreateResponseDto createUser(SystemUserCreateRequestDto requestDto) {
+    public SystemUserCreateResponseDto createUser(SystemUserCreateRequestDto requestDto, HttpServletRequest request) {
         // 아이디 중복 검증
         String userId = requestDto.getUserId();
         List<SystemUser> findUser = findByUserId(userId);
@@ -54,16 +61,26 @@ public class SystemUserService {
 
         String userNm = requestDto.getUserNm();
         String userPw = passwordEncoder.encode(requestDto.getUserPw()); // 비밀번호 암호화
-        // String userAuth = requestDto.getUserAuth();
         String userAuth = SystemUserRoleEnum.USER.getAuthority(); // 일반 회원만 가입이 가능하도록 설정
+
         SystemUser systemUser = new SystemUser(userId, userPw, userNm, userAuth);
         SystemUser savedSystemUser = systemUserRepository.save(systemUser); // 유저 정보 저장
+
+        // 히스토리 저장
+        UserHistory userHistory = UserHistory.builder()
+                .url("")
+                .actionType(ActionTypeEnum.C)
+                .regUserIdx(savedSystemUser.getId())
+                .regIp(CommonUtil.getClientIp(request))
+                .regDt(LocalDateTime.now())
+                .build();
+        userHistoryRepository.save(userHistory);
 
         return new SystemUserCreateResponseDto(savedSystemUser);
     }
 
     @Transactional
-    public SystemUserUpdateResponseDto updateUser(String userId, SystemUserUpdateRequestDto requestDto) {
+    public SystemUserUpdateResponseDto updateUser(String userId, SystemUserUpdateRequestDto requestDto, HttpServletRequest request) {
         List<SystemUser> findUser = findByUserId(userId);
 
         // 존재하는 회원인지 확인
@@ -75,11 +92,21 @@ public class SystemUserService {
         SystemUser user = findUser.get(0);
         user.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
 
+        // 히스토리 저장
+        UserHistory userHistory = UserHistory.builder()
+                .url("")
+                .actionType(ActionTypeEnum.U)
+                .regUserIdx(user.getId())
+                .regIp(CommonUtil.getClientIp(request))
+                .regDt(LocalDateTime.now())
+                .build();
+        userHistoryRepository.save(userHistory);
+
         return new SystemUserUpdateResponseDto(user);
     }
 
     @Transactional
-    public SystemUserDeleteResponseDto deleteUser(String userId) {
+    public SystemUserDeleteResponseDto deleteUser(String userId, HttpServletRequest request) {
         // 존재하는 회원인지 확인
         List<SystemUser> findUser = findByUserId(userId);
         if (findUser.isEmpty()) {
@@ -87,6 +114,16 @@ public class SystemUserService {
         }
 
         systemUserRepository.deleteByUserId(userId);
+
+        // 히스토리 저장
+        UserHistory userHistory = UserHistory.builder()
+                .url("")
+                .actionType(ActionTypeEnum.D)
+                .regUserIdx(findUser.get(0).getId())
+                .regIp(CommonUtil.getClientIp(request))
+                .regDt(LocalDateTime.now())
+                .build();
+        userHistoryRepository.save(userHistory);
 
         return new SystemUserDeleteResponseDto(userId);
     }
