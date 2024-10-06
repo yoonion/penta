@@ -1,6 +1,5 @@
 package com.task.penta.common;
 
-import com.task.penta.exception.ErrorCode;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
