@@ -22,6 +22,12 @@
         th {
             background-color: #f2f2f2; /* 헤더 배경색 */
         }
+
+        .user-id {
+            color: blue; /* 아이디 색상 */
+            text-decoration: underline; /* 아이디에 밑줄 추가 */
+            cursor: pointer; /* 커서 포인터로 변경 */
+        }
     </style>
 </head>
 <body>
@@ -38,7 +44,9 @@
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <td th:text="${user.userId}">아이디</td>
+                <td>
+                    <a th:href="@{/admin/users/{userId}(userId=${user.userId})}" class="user-id" th:text="${user.userId}">아이디</a>
+                </td>
                 <td th:text="${user.userNm}">이름</td>
                 <td th:text="${user.userAuth}">권한</td>
             </tr>

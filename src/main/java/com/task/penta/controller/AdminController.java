@@ -1,11 +1,13 @@
 package com.task.penta.controller;
 
 import com.task.penta.dto.SystemUserSearchResponseDto;
+import com.task.penta.entity.SystemUser;
 import com.task.penta.service.SystemUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -17,11 +19,25 @@ public class AdminController {
 
     private final SystemUserService systemUserService;
 
+    /**
+     * 회원 list 페이지
+     */
     @GetMapping("/users")
     public String listUsers(Model model) {
         List<SystemUserSearchResponseDto> users = systemUserService.getUsers("", "");
         model.addAttribute("users", users);
 
         return "admin/user-list";
+    }
+
+    /**
+     * 회원 상세 페이지
+     */
+    @GetMapping("/users/{userId}")
+    public String userDetail(@PathVariable String userId, Model model) {
+        List<SystemUserSearchResponseDto> users = systemUserService.getUsers(userId, "");// ID로 사용자 정보를 조회
+        model.addAttribute("user", users.get(0));
+
+        return "admin/user-detail";
     }
 }
