@@ -9,9 +9,7 @@
 </head>
 <body>
     <header th:replace="~{fragments/header :: header}"></header>
-
-    <!-- SYSTEM_ADMIN 권한을 가지고 있다면 보임 -->
-    <div sec:authorize="hasAuthority('SYSTEM_ADMIN')"><a th:href="@{/admin/users}">회원 목록</a></div>
+    -------- 회원 목록 list -----------
 
 </body>
 </html>

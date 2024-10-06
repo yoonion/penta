@@ -76,6 +76,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                        .requestMatchers("/admin/**").hasAuthority("SYSTEM_ADMIN") // admin 권한 필요
                         .requestMatchers("/user/signup").permitAll() // 회원가입 페이지 접근 허용
                         .requestMatchers(HttpMethod.POST, "/api/system-users").permitAll() // 회원가입 POST 요청 API 접근 허용
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
