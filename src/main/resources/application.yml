@@ -4,7 +4,7 @@ spring:
       mode: always # /resources -> data.sql & schema.sql 실행 설정
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/penta
+    url: jdbc:mariadb://localhost:3306/penta_ksy?createDatabaseIfNotExist=true # DB 없을 경우 자동 생성
     username: root
     password: 1111
 
@@ -15,12 +15,6 @@ spring:
       hibernate:
         format_sql: true # sql 가독성 있게 출력
         show_sql: true
-
-#logging:
-#  level:
-#    org.hibernate:
-#      type.descriptor.sql: trace
-#      SQL: DEBUG
 
 jwt:
   secret:
