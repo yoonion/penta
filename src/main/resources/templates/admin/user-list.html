@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        table {
+            width: 100%; /* 테이블 너비를 100%로 설정 */
+            border-collapse: collapse; /* 테두리 겹침 방지 */
+            margin: 20px 0; /* 테이블 위 아래 여백 설정 */
+        }
+
+        th, td {
+            padding: 15px; /* 셀 간격을 15px로 설정 */
+            text-align: left; /* 텍스트 정렬 */
+            border: 1px solid #ddd; /* 셀 테두리 */
+        }
+
+        th {
+            background-color: #f2f2f2; /* 헤더 배경색 */
+        }
+
+        .user-id {
+            color: blue; /* 아이디 색상 */
+            text-decoration: underline; /* 아이디에 밑줄 추가 */
+            cursor: pointer; /* 커서 포인터로 변경 */
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main>
+        <h1>회원 목록</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>권한</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td>
+                    <a th:href="@{/admin/users/{userId}(userId=${user.userId})}" class="user-id" th:text="${user.userId}">아이디</a>
+                </td>
+                <td th:text="${user.userNm}">이름</td>
+                <td th:text="${user.userAuth}">권한</td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+
+</body>
+</html>

@@ -63,8 +63,7 @@ public class SystemUserService {
     }
 
     @Transactional
-    public SystemUserUpdateResponseDto updateUser(SystemUserUpdateRequestDto requestDto) {
-        String userId = requestDto.getUserId();
+    public SystemUserUpdateResponseDto updateUser(String userId, SystemUserUpdateRequestDto requestDto) {
         List<SystemUser> findUser = findByUserId(userId);
 
         // 존재하는 회원인지 확인
