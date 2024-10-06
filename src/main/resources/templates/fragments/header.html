@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <body>
     <div th:fragment="header">
         <header>
@@ -17,13 +18,23 @@
 
                     <!-- 로그아웃 버튼 -->
                     <li sec:authorize="isAuthenticated()">
-                        <button type="button" style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline;">
+                        <button type="button" id="logoutBtn" style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline;">
                             로그아웃
                         </button>
                     </li>
                 </ul>
             </nav>
         </header>
+        <script>
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.addEventListener('click', function () {
+                console.log("로그아웃 버튼 클릭")
+                // jwt 토큰 제거
+                document.cookie = 'Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                window.location.href = '/user/login'; // 로그인 페이지로
+            });
+        </script>
     </div>
+
 </body>
 </html>
