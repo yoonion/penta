@@ -1,8 +1,10 @@
 package com.task.penta.controller;
 
 import com.task.penta.dto.SystemUserSearchResponseDto;
+import com.task.penta.entity.SystemUserRoleEnum;
 import com.task.penta.service.SystemUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
+@Secured(SystemUserRoleEnum.Authority.ADMIN)
 public class AdminController {
 
     private final SystemUserService systemUserService;
