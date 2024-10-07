@@ -13,7 +13,7 @@
 
                     <!-- 인증된 사용자에게만 표시 -->
                     <li sec:authorize="isAuthenticated()">
-                        <span sec:authentication="name"></span>님, 환영합니다
+                        <span th:text="${#authentication.principal.user.userNm}"></span>님, 환영합니다
                     </li>
 
                     <!-- 로그아웃 버튼 -->
