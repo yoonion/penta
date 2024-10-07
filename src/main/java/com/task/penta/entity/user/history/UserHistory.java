@@ -1,4 +1,4 @@
-package com.task.penta.entity;
+package com.task.penta.entity.user.history;
 
 import jakarta.persistence.*;
 import lombok.Builder;

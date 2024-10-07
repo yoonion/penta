@@ -1,4 +1,4 @@
-package com.task.penta.entity;
+package com.task.penta.entity.user;
 
 import lombok.Getter;
 

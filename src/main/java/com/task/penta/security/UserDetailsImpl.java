@@ -1,6 +1,6 @@
 package com.task.penta.security;
 
-import com.task.penta.entity.SystemUser;
+import com.task.penta.entity.user.SystemUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

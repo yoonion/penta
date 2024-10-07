@@ -1,14 +1,14 @@
-package com.task.penta.dto;
+package com.task.penta.dto.response;
 
-import com.task.penta.entity.SystemUser;
+import com.task.penta.entity.user.SystemUser;
 import lombok.Getter;
 
 @Getter
-public class SystemUserUpdateResponseDto {
+public class UserUpdateResponseDto {
     private final String userId;
     private final String userNm;
 
-    public SystemUserUpdateResponseDto(SystemUser user) {
+    public UserUpdateResponseDto(SystemUser user) {
         this.userId = user.getUserId();
         this.userNm = user.getUserNm();
     }

@@ -1,6 +1,6 @@
 package com.task.penta.repository;
 
-import com.task.penta.entity.SystemUser;
+import com.task.penta.entity.user.SystemUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

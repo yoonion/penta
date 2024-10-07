@@ -1,4 +1,4 @@
-package com.task.penta.dto;
+package com.task.penta.dto.request;
 
 import lombok.Getter;
 

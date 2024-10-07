@@ -1,6 +1,6 @@
 package com.task.penta.security;
 
-import com.task.penta.entity.SystemUser;
+import com.task.penta.entity.user.SystemUser;
 import com.task.penta.repository.SystemUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

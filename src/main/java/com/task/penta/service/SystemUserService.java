@@ -1,11 +1,16 @@
 package com.task.penta.service;
 
 import com.task.penta.common.CommonUtil;
-import com.task.penta.dto.*;
-import com.task.penta.entity.ActionTypeEnum;
-import com.task.penta.entity.SystemUser;
-import com.task.penta.entity.SystemUserRoleEnum;
-import com.task.penta.entity.UserHistory;
+import com.task.penta.dto.request.UserCreateRequestDto;
+import com.task.penta.dto.request.UserUpdateRequestDto;
+import com.task.penta.dto.response.UserCreateResponseDto;
+import com.task.penta.dto.response.UserDeleteResponseDto;
+import com.task.penta.dto.response.UserSearchResponseDto;
+import com.task.penta.dto.response.UserUpdateResponseDto;
+import com.task.penta.entity.user.history.ActionTypeEnum;
+import com.task.penta.entity.user.SystemUser;
+import com.task.penta.entity.user.SystemUserRoleEnum;
+import com.task.penta.entity.user.history.UserHistory;
 import com.task.penta.exception.CustomException;
 import com.task.penta.exception.ErrorCode;
 import com.task.penta.repository.SystemUserRepository;
@@ -29,7 +34,7 @@ public class SystemUserService {
     private final UserHistoryRepository userHistoryRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<SystemUserSearchResponseDto> getUsers(String userId, String userNm) {
+    public List<UserSearchResponseDto> getUsers(String userId, String userNm) {
         List<SystemUser> users;
 
         // 조건에 따라 사용자 조회 (파라미터가 있는 경우 -> 해당 조건으로 검색하고, 파라미터가 없는 경우 모든 회원을 반환)
@@ -46,12 +51,12 @@ public class SystemUserService {
 
         // SystemUser 객체 DTO로 변환
         return users.stream()
-                .map(SystemUserSearchResponseDto::new)
+                .map(UserSearchResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public SystemUserCreateResponseDto createUser(SystemUserCreateRequestDto requestDto, HttpServletRequest request) {
+    public UserCreateResponseDto createUser(UserCreateRequestDto requestDto, HttpServletRequest request) {
         // 아이디 중복 검증
         String userId = requestDto.getUserId();
         List<SystemUser> findUser = findByUserId(userId);
@@ -76,11 +81,11 @@ public class SystemUserService {
                 .build();
         userHistoryRepository.save(userHistory);
 
-        return new SystemUserCreateResponseDto(savedSystemUser);
+        return new UserCreateResponseDto(savedSystemUser);
     }
 
     @Transactional
-    public SystemUserUpdateResponseDto updateUser(String userId, SystemUserUpdateRequestDto requestDto, HttpServletRequest request) {
+    public UserUpdateResponseDto updateUser(String userId, UserUpdateRequestDto requestDto, HttpServletRequest request) {
         List<SystemUser> findUser = findByUserId(userId);
 
         // 존재하는 회원인지 확인
@@ -102,11 +107,11 @@ public class SystemUserService {
                 .build();
         userHistoryRepository.save(userHistory);
 
-        return new SystemUserUpdateResponseDto(user);
+        return new UserUpdateResponseDto(user);
     }
 
     @Transactional
-    public SystemUserDeleteResponseDto deleteUser(String userId, HttpServletRequest request) {
+    public UserDeleteResponseDto deleteUser(String userId, HttpServletRequest request) {
         // 존재하는 회원인지 확인
         List<SystemUser> findUser = findByUserId(userId);
         if (findUser.isEmpty()) {
@@ -125,7 +130,7 @@ public class SystemUserService {
                 .build();
         userHistoryRepository.save(userHistory);
 
-        return new SystemUserDeleteResponseDto(userId);
+        return new UserDeleteResponseDto(userId);
     }
 
     private List<SystemUser> findByUserId(String userId) {

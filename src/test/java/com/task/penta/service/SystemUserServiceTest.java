@@ -1,8 +1,8 @@
 package com.task.penta.service;
 
-import com.task.penta.dto.SystemUserCreateRequestDto;
-import com.task.penta.dto.SystemUserCreateResponseDto;
-import com.task.penta.entity.SystemUser;
+import com.task.penta.dto.request.UserCreateRequestDto;
+import com.task.penta.dto.response.UserCreateResponseDto;
+import com.task.penta.entity.user.SystemUser;
 import com.task.penta.repository.SystemUserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -11,10 +11,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -39,14 +37,14 @@ class SystemUserServiceTest {
         when(mockRequest.getRemoteAddr()).thenReturn("192.168.0.1");
 
         // 일반 회원 생성
-        SystemUserCreateRequestDto requestDto =
-                new SystemUserCreateRequestDto(
+        UserCreateRequestDto requestDto =
+                new UserCreateRequestDto(
                     "normalUser",
                         "1234",
                         "테스트일반회원"
                 );
 
-        SystemUserCreateResponseDto savedNormalUser = systemUserService.createUser(requestDto, mockRequest);
+        UserCreateResponseDto savedNormalUser = systemUserService.createUser(requestDto, mockRequest);
 
         // 검증
         assertThat(savedNormalUser.getUserId()).isEqualTo("normalUser");
