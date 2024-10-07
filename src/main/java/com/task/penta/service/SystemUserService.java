@@ -72,14 +72,7 @@ public class SystemUserService {
         SystemUser savedSystemUser = systemUserRepository.save(systemUser); // 유저 정보 저장
 
         // 히스토리 저장
-        UserHistory userHistory = UserHistory.builder()
-                .url("")
-                .actionType(ActionTypeEnum.C)
-                .regUserIdx(savedSystemUser.getId())
-                .regIp(CommonUtil.getClientIp(request))
-                .regDt(LocalDateTime.now())
-                .build();
-        userHistoryRepository.save(userHistory);
+        saveUserHistory("", ActionTypeEnum.C, savedSystemUser, request);
 
         return new UserCreateResponseDto(savedSystemUser);
     }
@@ -98,14 +91,7 @@ public class SystemUserService {
         user.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
 
         // 히스토리 저장
-        UserHistory userHistory = UserHistory.builder()
-                .url("")
-                .actionType(ActionTypeEnum.U)
-                .regUserIdx(user.getId())
-                .regIp(CommonUtil.getClientIp(request))
-                .regDt(LocalDateTime.now())
-                .build();
-        userHistoryRepository.save(userHistory);
+        saveUserHistory("", ActionTypeEnum.U, user, request);
 
         return new UserUpdateResponseDto(user);
     }
@@ -120,17 +106,21 @@ public class SystemUserService {
 
         systemUserRepository.deleteByUserId(userId);
 
-        // 히스토리 저장
+        saveUserHistory("", ActionTypeEnum.D, findUser.get(0), request);
+
+        return new UserDeleteResponseDto(userId);
+    }
+
+    // 회원 추가(C), 수정(U), 삭제(D)에 따른 히스토리 기록. 추후 다른 서비스에서 사용한다면, service 계층으로 분리시켜 재사용 고려.
+    private void saveUserHistory(String url, ActionTypeEnum actionType, SystemUser findUser, HttpServletRequest request) {
         UserHistory userHistory = UserHistory.builder()
-                .url("")
-                .actionType(ActionTypeEnum.D)
-                .regUserIdx(findUser.get(0).getId())
+                .url(url)
+                .actionType(actionType)
+                .regUserIdx(findUser.getId())
                 .regIp(CommonUtil.getClientIp(request))
                 .regDt(LocalDateTime.now())
                 .build();
         userHistoryRepository.save(userHistory);
-
-        return new UserDeleteResponseDto(userId);
     }
 
     private List<SystemUser> findByUserId(String userId) {
