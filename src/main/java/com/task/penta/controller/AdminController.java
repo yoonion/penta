@@ -16,7 +16,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-@Secured(SystemUserRoleEnum.Authority.ADMIN)
+@Secured(SystemUserRoleEnum.Authority.ADMIN) // 관리자 전용 페이지
 public class AdminController {
 
     private final SystemUserService systemUserService;

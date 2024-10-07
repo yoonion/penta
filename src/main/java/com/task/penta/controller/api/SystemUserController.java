@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/system-users")
+@RequestMapping("/api/users")
 public class SystemUserController {
 
     private final SystemUserService systemUserService;
