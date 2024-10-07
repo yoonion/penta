@@ -7,9 +7,9 @@ import com.task.penta.dto.response.UserCreateResponseDto;
 import com.task.penta.dto.response.UserDeleteResponseDto;
 import com.task.penta.dto.response.UserSearchResponseDto;
 import com.task.penta.dto.response.UserUpdateResponseDto;
-import com.task.penta.entity.user.history.ActionTypeEnum;
 import com.task.penta.entity.user.SystemUser;
 import com.task.penta.entity.user.SystemUserRoleEnum;
+import com.task.penta.entity.user.history.ActionTypeEnum;
 import com.task.penta.entity.user.history.UserHistory;
 import com.task.penta.exception.CustomException;
 import com.task.penta.exception.ErrorCode;
@@ -34,22 +34,30 @@ public class SystemUserService {
     private final UserHistoryRepository userHistoryRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<UserSearchResponseDto> getUsers(String userId, String userNm) {
-        List<SystemUser> users;
+    // 단일 회원 조회
+    public UserSearchResponseDto getUserById(String userId) {
+        SystemUser findUser = findByUserId(userId);
 
-        // 조건에 따라 사용자 조회 (파라미터가 있는 경우 -> 해당 조건으로 검색하고, 파라미터가 없는 경우 모든 회원을 반환)
-        // 회원ID & 회원 이름을 모두 입력하지 않은 경우
-        if (userId != null && !userId.isEmpty() && userNm != null && !userNm.isEmpty()) {
-            users = systemUserRepository.findByUserIdAndUserNm(userId, userNm);
-        } else if (userId != null && !userId.isEmpty()) { // userId만 입력한 경우
-            users = systemUserRepository.findByUserId(userId);
-        } else if (userNm != null && !userNm.isEmpty()) { // userNm만 입력한 경우
+        return new UserSearchResponseDto(findUser);
+    }
+
+    // 이름으로 회원 조회
+    public List<UserSearchResponseDto> getUsersByName(String userNm) {
+        List<SystemUser> users;
+        if (userNm != null && !userNm.isEmpty()) {
             users = systemUserRepository.findByUserNm(userNm);
         } else {
-            users = systemUserRepository.findAll(); // 모든 사용자 조회
+            // 비어 있을 경우 예외를 발생시키지 않고, 전체 조회를 처리하는 메서드를 호출
+            return getAllUsers();
         }
+        return users.stream()
+                .map(UserSearchResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
-        // SystemUser 객체 DTO로 변환
+    // 전체 회원 조회
+    public List<UserSearchResponseDto> getAllUsers() {
+        List<SystemUser> users = systemUserRepository.findAll();
         return users.stream()
                 .map(UserSearchResponseDto::new)
                 .collect(Collectors.toList());
@@ -59,8 +67,7 @@ public class SystemUserService {
     public UserCreateResponseDto createUser(UserCreateRequestDto requestDto, HttpServletRequest request) {
         // 아이디 중복 검증
         String userId = requestDto.getUserId();
-        List<SystemUser> findUser = findByUserId(userId);
-        if(!findUser.isEmpty()) {
+        if (systemUserRepository.existsByUserId(userId)) {
             throw new CustomException(ErrorCode.DUPLICATE_USER_ID);
         }
 
@@ -79,34 +86,24 @@ public class SystemUserService {
 
     @Transactional
     public UserUpdateResponseDto updateUser(String userId, UserUpdateRequestDto requestDto, HttpServletRequest request) {
-        List<SystemUser> findUser = findByUserId(userId);
-
-        // 존재하는 회원인지 확인
-        if (findUser.isEmpty()) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        SystemUser findUser = findByUserId(userId);
 
         // 회원 이름 수정
-        SystemUser user = findUser.get(0);
-        user.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
+        findUser.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
 
         // 히스토리 저장
-        saveUserHistory("", ActionTypeEnum.U, user, request);
+        saveUserHistory("", ActionTypeEnum.U, findUser, request);
 
-        return new UserUpdateResponseDto(user);
+        return new UserUpdateResponseDto(findUser);
     }
 
     @Transactional
     public UserDeleteResponseDto deleteUser(String userId, HttpServletRequest request) {
         // 존재하는 회원인지 확인
-        List<SystemUser> findUser = findByUserId(userId);
-        if (findUser.isEmpty()) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        SystemUser findUser = findByUserId(userId);
+        systemUserRepository.deleteByUserId(findUser.getUserId());
 
-        systemUserRepository.deleteByUserId(userId);
-
-        saveUserHistory("", ActionTypeEnum.D, findUser.get(0), request);
+        saveUserHistory("", ActionTypeEnum.D, findUser, request);
 
         return new UserDeleteResponseDto(userId);
     }
@@ -123,7 +120,8 @@ public class SystemUserService {
         userHistoryRepository.save(userHistory);
     }
 
-    private List<SystemUser> findByUserId(String userId) {
-        return systemUserRepository.findByUserId(userId);
+    private SystemUser findByUserId(String userId) {
+        return systemUserRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

@@ -86,8 +86,8 @@ public class WebSecurityConfig {
         http.securityMatcher("/api/**"); // /api/** 요청에만 적용
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // 회원가입 POST 요청 API 접근 허용
                         .requestMatchers("/api/**").hasAuthority(SystemUserRoleEnum.ADMIN.getAuthority()) // admin 계정만 접근이 가능하다.
-                        .requestMatchers(HttpMethod.POST, "/api/system-users").permitAll() // 회원가입 POST 요청 API 접근 허용
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
