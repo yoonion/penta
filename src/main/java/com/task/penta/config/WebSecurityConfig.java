@@ -34,25 +34,19 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
-    /**
-     * 비밀번호 암호화
-     */
+    // 비밀번호 암호화
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * 인증 manager
-     */
+    // 인증 manager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-    /**
-     * 커스텀 인증 (Authentication) filter
-     */
+    // 커스텀 인증 (Authentication) filter
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
@@ -60,30 +54,27 @@ public class WebSecurityConfig {
         return filter;
     }
 
-    /**
-     * 커스텀 인가 (Authorization) filter
-     */
+    // 커스텀 인가 (Authorization) filter
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
     }
 
-    /**
-     * 인증 (Authentication) 실패 핸들러
-     */
+    // 인증 (Authentication) 실패 핸들러
     @Bean
     public AuthenticationEntryPoint entryPoint() {
         return new CustomAuthenticationEntryPoint();
     }
 
-    /**
-     * 인가 (Authorization) 실패 핸들러
-     */
+    // 인가 (Authorization) 실패 핸들러
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
 
+    /**
+     * Restful API security 설정 (/api/** 요청에만 적용됩니다.)
+     */
     @Bean
     @Order(1)
     public SecurityFilterChain ApiSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -108,6 +99,9 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    /**
+     * Web security 설정 (api 를 제외한 모든 웹 요청 설정입니다.)
+     */
     @Bean
     @Order(2)
     public SecurityFilterChain WebSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -141,8 +135,6 @@ public class WebSecurityConfig {
 
     /**
      * Spring security 공통 설정
-     * @param http
-     * @throws Exception
      */
     private void applyCommonSecurityConfig(HttpSecurity http) throws Exception {
         // CSRF 설정
