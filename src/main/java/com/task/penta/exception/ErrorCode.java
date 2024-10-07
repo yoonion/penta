@@ -14,6 +14,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
     DUPLICATE_USER_ID(HttpStatus.CONFLICT, "중복된 회원 ID 입니다."),
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "유효하지 않은 파라미터입니다."),
+    HTTP_METHOD_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "지원하지 않는 HTTP Method 입니다."),
 
     ;
 

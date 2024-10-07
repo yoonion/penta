@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleExceptions(Exception e) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.createError(e.getMessage()));
+                .body(ApiResponse.createError(ErrorCode.INTERNAL_SERVER_ERROR.getMessage()));
     }
 
     // Bean validation exception
@@ -46,6 +46,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
-                .body(ApiResponse.createError(e.getMessage()));
+                .body(ApiResponse.createError(ErrorCode.HTTP_METHOD_NOT_ALLOWED.getMessage()));
     }
 }
