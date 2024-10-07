@@ -5,11 +5,13 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Main Page</title>
 </head>
 <body>
     <header th:replace="~{fragments/header :: header}"></header>
 
+    <h1>Main Page</h1>
+    ADMIN 권한 계정 로그인 시, '회원 목록'을 볼 수 있는 링크가 아래 보입니다.
     <!-- SYSTEM_ADMIN 권한을 가지고 있다면 보임 -->
     <div sec:authorize="hasAuthority('SYSTEM_ADMIN')"><a th:href="@{/admin/users}">회원 목록</a></div>
 
