@@ -1,6 +1,7 @@
 package com.task.penta.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.task.penta.config.AuthResponseUtil;
 import com.task.penta.dto.request.LoginRequestDto;
 import com.task.penta.security.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
@@ -57,6 +58,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = jwtUtil.createToken(username, role);
         jwtUtil.addJwtToCookie(token, response);
+
+        AuthResponseUtil.authResultResponseBody(response, HttpServletResponse.SC_OK, "로그인 성공");
     }
 
     /**
@@ -65,6 +68,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         log.info("로그인 실패");
-        response.setStatus(401);
+        AuthResponseUtil.authResultResponseBody(response, HttpServletResponse.SC_UNAUTHORIZED, "로그인 실패. 아이디와 비밀번호를 확인해주세요.");
     }
 }
