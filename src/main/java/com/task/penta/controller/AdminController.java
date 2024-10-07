@@ -1,7 +1,7 @@
 package com.task.penta.controller;
 
-import com.task.penta.dto.SystemUserSearchResponseDto;
-import com.task.penta.entity.SystemUserRoleEnum;
+import com.task.penta.dto.response.UserSearchResponseDto;
+import com.task.penta.entity.user.SystemUserRoleEnum;
 import com.task.penta.service.SystemUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -26,7 +26,7 @@ public class AdminController {
      */
     @GetMapping("/users")
     public String listUsers(Model model) {
-        List<SystemUserSearchResponseDto> users = systemUserService.getUsers("", "");
+        List<UserSearchResponseDto> users = systemUserService.getUsers("", "");
         model.addAttribute("users", users);
 
         return "admin/user-list";
@@ -37,7 +37,7 @@ public class AdminController {
      */
     @GetMapping("/users/{userId}")
     public String userDetail(@PathVariable String userId, Model model) {
-        List<SystemUserSearchResponseDto> users = systemUserService.getUsers(userId, "");// ID로 사용자 정보를 조회
+        List<UserSearchResponseDto> users = systemUserService.getUsers(userId, "");// ID로 사용자 정보를 조회
         model.addAttribute("user", users.get(0));
 
         return "admin/user-detail";
@@ -48,7 +48,7 @@ public class AdminController {
      */
     @GetMapping("/users/edit/{userId}")
     public String editUser(@PathVariable String userId, Model model) {
-        List<SystemUserSearchResponseDto> users = systemUserService.getUsers(userId, "");
+        List<UserSearchResponseDto> users = systemUserService.getUsers(userId, "");
         model.addAttribute("user", users.get(0));
 
         return "admin/user-edit";

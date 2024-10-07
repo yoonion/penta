@@ -1,6 +1,8 @@
 package com.task.penta.config;
 
-import com.task.penta.entity.SystemUserRoleEnum;
+import com.task.penta.config.exception.CustomAccessDeniedHandler;
+import com.task.penta.config.exception.CustomAuthenticationEntryPoint;
+import com.task.penta.entity.user.SystemUserRoleEnum;
 import com.task.penta.jwt.JwtAuthenticationFilter;
 import com.task.penta.jwt.JwtAuthorizationFilter;
 import com.task.penta.jwt.JwtUtil;

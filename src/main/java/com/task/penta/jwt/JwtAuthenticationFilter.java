@@ -1,7 +1,7 @@
 package com.task.penta.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.task.penta.dto.LoginRequestDto;
+import com.task.penta.dto.request.LoginRequestDto;
 import com.task.penta.security.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

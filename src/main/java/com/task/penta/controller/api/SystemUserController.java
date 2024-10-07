@@ -1,7 +1,12 @@
 package com.task.penta.controller.api;
 
 import com.task.penta.common.ApiResponse;
-import com.task.penta.dto.*;
+import com.task.penta.dto.request.UserCreateRequestDto;
+import com.task.penta.dto.request.UserUpdateRequestDto;
+import com.task.penta.dto.response.UserCreateResponseDto;
+import com.task.penta.dto.response.UserDeleteResponseDto;
+import com.task.penta.dto.response.UserSearchResponseDto;
+import com.task.penta.dto.response.UserUpdateResponseDto;
 import com.task.penta.service.SystemUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -24,10 +29,10 @@ public class SystemUserController {
      * @return 조회된 회원 정보의 리스트를 JSON 형식으로 응답합니다. List<SystemUserSearchResponseDto> 형식입니다.
      */
     @GetMapping
-    public ApiResponse<List<SystemUserSearchResponseDto>> getUsers(
+    public ApiResponse<List<UserSearchResponseDto>> getUsers(
             @RequestParam(required = false) String userId,
             @RequestParam(required = false) String userNm) {
-        List<SystemUserSearchResponseDto> users = systemUserService.getUsers(userId, userNm);
+        List<UserSearchResponseDto> users = systemUserService.getUsers(userId, userNm);
 
         return ApiResponse.createSuccess(users);
     }
@@ -39,10 +44,10 @@ public class SystemUserController {
      * @return 추가된 회원의 기본 정보를 JSON 형식으로 응답합니다. SystemUserCreateResponseDto 형식입니다.
      */
     @PostMapping
-    public ApiResponse<SystemUserCreateResponseDto> createUser(
-            @Valid @RequestBody SystemUserCreateRequestDto requestDto,
+    public ApiResponse<UserCreateResponseDto> createUser(
+            @Valid @RequestBody UserCreateRequestDto requestDto,
             HttpServletRequest request) {
-        SystemUserCreateResponseDto createdUser = systemUserService.createUser(requestDto, request);
+        UserCreateResponseDto createdUser = systemUserService.createUser(requestDto, request);
 
         return ApiResponse.createSuccess(createdUser);
     }
@@ -54,11 +59,11 @@ public class SystemUserController {
      * @return 수정된 회원의 ID, 이름을 JSON 형식으로 응답합니다.
      */
     @PutMapping("/{userId}")
-    public ApiResponse<SystemUserUpdateResponseDto> updateUser(
+    public ApiResponse<UserUpdateResponseDto> updateUser(
             @PathVariable String userId,
-            @Valid @RequestBody SystemUserUpdateRequestDto requestDto,
+            @Valid @RequestBody UserUpdateRequestDto requestDto,
             HttpServletRequest request) {
-        SystemUserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto, request);
+        UserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto, request);
 
         return ApiResponse.createSuccess(updatedUser);
     }
@@ -69,9 +74,9 @@ public class SystemUserController {
      * @return 삭제된 회원의 ID를 JSON 형식으로 응답합니다.
      */
     @DeleteMapping("/{userId}")
-    public ApiResponse<SystemUserDeleteResponseDto> deleteUser(
+    public ApiResponse<UserDeleteResponseDto> deleteUser(
             @PathVariable String userId, HttpServletRequest request) {
-        SystemUserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, request);
+        UserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, request);
 
         return ApiResponse.createSuccess(deletedUser);
     }

@@ -1,5 +1,6 @@
-package com.task.penta.config;
+package com.task.penta.config.exception;
 
+import com.task.penta.config.AuthResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
