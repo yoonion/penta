@@ -23,16 +23,31 @@ public class SystemUserController {
     private final SystemUserService systemUserService;
 
     /**
-     * 회원 조회 API
-     * @param userId (선택사항) 회원 ID
-     * @param userNm (선택사항) 회원 이름
-     * @return 조회된 회원 정보의 리스트를 JSON 형식으로 응답합니다. List<SystemUserSearchResponseDto> 형식입니다.
+     * 단일 회원 조회 API
+     * @param userId 회원 ID
+     * @return 조회된 회원 정보를 JSON 형식으로 응답합니다. UserSearchResponseDto 형식입니다.
+     */
+    @GetMapping("/{userId}")
+    public ApiResponse<UserSearchResponseDto> getUserById(@PathVariable String userId) {
+        UserSearchResponseDto user = systemUserService.getUserById(userId);
+
+        return ApiResponse.createSuccess(user);
+    }
+
+    /**
+     * 다수 회원 조회 API
+     * @param userNm (선택사항) 회원 이름 / 명시하지 않을 경우, 전체 회원의 정보를 응답합니다.
+     * @return 조회된 회원 정보의 리스트를 JSON 형식으로 응답합니다. List<UserSearchResponseDto> 형식입니다.
      */
     @GetMapping
     public ApiResponse<List<UserSearchResponseDto>> getUsers(
-            @RequestParam(required = false) String userId,
             @RequestParam(required = false) String userNm) {
-        List<UserSearchResponseDto> users = systemUserService.getUsers(userId, userNm);
+        List<UserSearchResponseDto> users;
+        if (userNm == null || userNm.isEmpty()) {
+            users = systemUserService.getAllUsers(); // 전체 사용자 조회
+        } else {
+            users = systemUserService.getUsersByName(userNm); // 이름으로 조회
+        }
 
         return ApiResponse.createSuccess(users);
     }

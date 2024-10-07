@@ -1,14 +1,14 @@
 package com.task.penta.security;
 
 import com.task.penta.entity.user.SystemUser;
+import com.task.penta.exception.CustomException;
+import com.task.penta.exception.ErrorCode;
 import com.task.penta.repository.SystemUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +18,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        List<SystemUser> systemUser = systemUserRepository.findByUserId(userId);
-        if (systemUser.isEmpty()) {
-            throw new UsernameNotFoundException("Not Found " + userId);
-        }
+        SystemUser systemUser = systemUserRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return new UserDetailsImpl(systemUser.get(0));
+        return new UserDetailsImpl(systemUser);
     }
 }

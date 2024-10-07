@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const response = await fetch('http://localhost:8080/api/system-users', { // 실제 REST API 엔드포인트로 변경
+                const response = await fetch('http://localhost:8080/api/users', { // 실제 REST API 엔드포인트로 변경
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

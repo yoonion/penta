@@ -26,7 +26,7 @@ public class AdminController {
      */
     @GetMapping("/users")
     public String listUsers(Model model) {
-        List<UserSearchResponseDto> users = systemUserService.getUsers("", "");
+        List<UserSearchResponseDto> users = systemUserService.getUsersByName("");
         model.addAttribute("users", users);
 
         return "admin/user-list";
@@ -37,8 +37,8 @@ public class AdminController {
      */
     @GetMapping("/users/{userId}")
     public String userDetail(@PathVariable String userId, Model model) {
-        List<UserSearchResponseDto> users = systemUserService.getUsers(userId, "");// ID로 사용자 정보를 조회
-        model.addAttribute("user", users.get(0));
+        UserSearchResponseDto user = systemUserService.getUserById(userId);// ID로 사용자 정보를 조회
+        model.addAttribute("user", user);
 
         return "admin/user-detail";
     }
@@ -48,8 +48,8 @@ public class AdminController {
      */
     @GetMapping("/users/edit/{userId}")
     public String editUser(@PathVariable String userId, Model model) {
-        List<UserSearchResponseDto> users = systemUserService.getUsers(userId, "");
-        model.addAttribute("user", users.get(0));
+        UserSearchResponseDto user = systemUserService.getUserById(userId);
+        model.addAttribute("user", user);
 
         return "admin/user-edit";
     }
