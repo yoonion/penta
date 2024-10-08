@@ -2,18 +2,12 @@ package com.task.penta.service;
 
 import com.task.penta.dto.request.UserCreateRequestDto;
 import com.task.penta.dto.response.UserCreateResponseDto;
-import com.task.penta.entity.user.SystemUser;
-import com.task.penta.repository.SystemUserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class SystemUserServiceTest {
@@ -21,35 +15,26 @@ class SystemUserServiceTest {
     @Autowired
     private SystemUserService systemUserService;
 
-    @Autowired
-    private SystemUserRepository systemUserRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private static final String CLIENT_IP = "127.0.0.1";
 
     @Test
     @DisplayName("일반 회원 생성 테스트")
     void createNormalUserTest() {
-//        // Mock HttpServletRequest
-//        HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
-//
-//        // 클라이언트 IP 주소를 반환하도록 설정 (ex: 192.168.0.1)
-//        when(mockRequest.getRemoteAddr()).thenReturn("192.168.0.1");
-//
-//        // 일반 회원 생성
-//        UserCreateRequestDto requestDto =
-//                new UserCreateRequestDto(
-//                    "normalUser",
-//                        "1234",
-//                        "테스트일반회원"
-//                );
-//
-//        UserCreateResponseDto savedNormalUser = systemUserService.createUser(requestDto, mockRequest);
-//
-//        // 검증
-//        assertThat(savedNormalUser.getUserId()).isEqualTo("normalUser");
-//        assertThat(savedNormalUser.getUserNm()).isEqualTo("테스트일반회원");
-//        assertThat(savedNormalUser.getUserAuth()).isEqualTo("SYSTEM_USER");
+
+        // 일반 회원 생성
+        UserCreateRequestDto requestDto =
+                new UserCreateRequestDto(
+                    "usertest",
+                        "1234",
+                        "테스트일반회원",
+                        "user"
+                );
+        UserCreateResponseDto savedNormalUser = systemUserService.createUser(requestDto, CLIENT_IP);
+
+        // 검증
+        assertThat(savedNormalUser.getUserId()).isEqualTo("usertest");
+        assertThat(savedNormalUser.getUserNm()).isEqualTo("테스트일반회원");
+        assertThat(savedNormalUser.getUserAuth()).isEqualTo("SYSTEM_USER");
     }
 
     @Test
@@ -57,18 +42,19 @@ class SystemUserServiceTest {
     void createAdminUserTest() {
 
         // admin 회원 생성
-        SystemUser adminUser = new SystemUser(
-                "admintest",
-                passwordEncoder.encode("1234"),
-                "관리자테스트유저",
-                "SYSTEM_ADMIN"
-        );
+        UserCreateRequestDto requestDto =
+                new UserCreateRequestDto(
+                        "admintest",
+                        "1234",
+                        "테스트관리자",
+                        "admin"
+                );
 
-        SystemUser savedAdminUser = systemUserRepository.save(adminUser);
+        UserCreateResponseDto savedAdminUser = systemUserService.createUser(requestDto, CLIENT_IP);
 
         // 검증
         assertThat(savedAdminUser.getUserId()).isEqualTo("admintest");
-        assertThat(savedAdminUser.getUserNm()).isEqualTo("관리자테스트유저");
+        assertThat(savedAdminUser.getUserNm()).isEqualTo("테스트관리자");
         assertThat(savedAdminUser.getUserAuth()).isEqualTo("SYSTEM_ADMIN");
     }
 }
