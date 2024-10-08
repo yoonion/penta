@@ -64,7 +64,7 @@ public class SystemUserService {
     }
 
     @Transactional
-    public UserCreateResponseDto createUser(UserCreateRequestDto requestDto, HttpServletRequest request) {
+    public UserCreateResponseDto createUser(UserCreateRequestDto requestDto, String clientIp) {
         // 아이디 중복 검증
         String userId = requestDto.getUserId();
         if (systemUserRepository.existsByUserId(userId)) {
@@ -85,42 +85,42 @@ public class SystemUserService {
         SystemUser savedSystemUser = systemUserRepository.save(systemUser); // 유저 정보 저장
 
         // 히스토리 저장
-        saveUserHistory("", ActionTypeEnum.C, savedSystemUser, request);
+        saveUserHistory("", ActionTypeEnum.C, savedSystemUser, clientIp);
 
         return new UserCreateResponseDto(savedSystemUser);
     }
 
     @Transactional
-    public UserUpdateResponseDto updateUser(String userId, UserUpdateRequestDto requestDto, HttpServletRequest request) {
+    public UserUpdateResponseDto updateUser(String userId, UserUpdateRequestDto requestDto, String clientIp) {
         SystemUser findUser = findByUserId(userId);
 
         // 회원 이름 수정
         findUser.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
 
         // 히스토리 저장
-        saveUserHistory("", ActionTypeEnum.U, findUser, request);
+        saveUserHistory("", ActionTypeEnum.U, findUser, clientIp);
 
         return new UserUpdateResponseDto(findUser);
     }
 
     @Transactional
-    public UserDeleteResponseDto deleteUser(String userId, HttpServletRequest request) {
+    public UserDeleteResponseDto deleteUser(String userId, String clientIp) {
         // 존재하는 회원인지 확인
         SystemUser findUser = findByUserId(userId);
         systemUserRepository.deleteByUserId(findUser.getUserId());
 
-        saveUserHistory("", ActionTypeEnum.D, findUser, request);
+        saveUserHistory("", ActionTypeEnum.D, findUser, clientIp);
 
         return new UserDeleteResponseDto(userId);
     }
 
     // 회원 추가(C), 수정(U), 삭제(D)에 따른 히스토리 기록. 추후 다른 서비스에서 사용한다면, service 계층으로 분리시켜 재사용 고려.
-    private void saveUserHistory(String url, ActionTypeEnum actionType, SystemUser findUser, HttpServletRequest request) {
+    private void saveUserHistory(String url, ActionTypeEnum actionType, SystemUser findUser, String clientIp) {
         UserHistory userHistory = UserHistory.builder()
                 .url(url)
                 .actionType(actionType)
                 .regUserIdx(findUser.getId())
-                .regIp(CommonUtil.getClientIp(request))
+                .regIp(clientIp)
                 .regDt(LocalDateTime.now())
                 .build();
         userHistoryRepository.save(userHistory);

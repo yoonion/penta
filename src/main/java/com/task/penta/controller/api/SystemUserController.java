@@ -1,6 +1,7 @@
 package com.task.penta.controller.api;
 
 import com.task.penta.common.ApiResponse;
+import com.task.penta.common.CommonUtil;
 import com.task.penta.dto.request.UserCreateRequestDto;
 import com.task.penta.dto.request.UserUpdateRequestDto;
 import com.task.penta.dto.response.UserCreateResponseDto;
@@ -62,7 +63,8 @@ public class SystemUserController {
     public ApiResponse<UserCreateResponseDto> createUser(
             @Valid @RequestBody UserCreateRequestDto requestDto,
             HttpServletRequest request) {
-        UserCreateResponseDto createdUser = systemUserService.createUser(requestDto, request);
+        String clientIp = getClientIp(request);
+        UserCreateResponseDto createdUser = systemUserService.createUser(requestDto, clientIp);
 
         return ApiResponse.createSuccess(createdUser);
     }
@@ -78,7 +80,8 @@ public class SystemUserController {
             @PathVariable String userId,
             @Valid @RequestBody UserUpdateRequestDto requestDto,
             HttpServletRequest request) {
-        UserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto, request);
+        String clientIp = getClientIp(request);
+        UserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto, clientIp);
 
         return ApiResponse.createSuccess(updatedUser);
     }
@@ -91,8 +94,14 @@ public class SystemUserController {
     @DeleteMapping("/{userId}")
     public ApiResponse<UserDeleteResponseDto> deleteUser(
             @PathVariable String userId, HttpServletRequest request) {
-        UserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, request);
+        String clientIp = getClientIp(request);
+        UserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, clientIp);
 
         return ApiResponse.createSuccess(deletedUser);
+    }
+
+    // 클라이언트 ip 가져오기
+    private static String getClientIp(HttpServletRequest request) {
+        return CommonUtil.getClientIp(request);
     }
 }
