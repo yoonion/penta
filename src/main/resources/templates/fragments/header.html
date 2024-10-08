@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>header</title>
+</head>
 <body>
     <div th:fragment="header">
         <header>
@@ -8,7 +12,7 @@
                 <ul style="list-style: none; display: flex; gap: 20px; align-items: center;">
                     <!-- 메인 페이지 버튼 -->
                     <li>
-                        <a th:href="@{/}" style="text-decoration: none; font-weight: bold;">메인 페이지</a>
+                        <a th:href="@{/}" style="text-decoration: none; font-weight: bold;">메인으로</a>
                     </li>
 
                     <!-- 인증된 사용자에게만 표시 -->
@@ -25,6 +29,7 @@
                 </ul>
             </nav>
         </header>
+        <script th:src="@{/js/common.js}"></script> <!-- common.js를 포함 -->
         <script>
             const logoutBtn = document.getElementById('logoutBtn');
             logoutBtn.addEventListener('click', function () {
