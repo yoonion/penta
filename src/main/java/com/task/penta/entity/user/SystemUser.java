@@ -11,11 +11,19 @@ import lombok.NoArgsConstructor;
 public class SystemUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_idx")
+    @Column(name = "user_idx", nullable = false)
     private Integer id;
+
+    @Column(nullable = false, length = 30)
     private String userId;
+
+    @Column(nullable = false, length = 100)
     private String userPw;
+
+    @Column(nullable = false, length = 100)
     private String userNm;
+
+    @Column(nullable = false, length = 20)
     private String userAuth;
 
     public SystemUser(String userId, String userPw, String userNm, String userAuth) {
