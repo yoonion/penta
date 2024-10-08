@@ -73,7 +73,13 @@ public class SystemUserService {
 
         String userNm = requestDto.getUserNm();
         String userPw = passwordEncoder.encode(requestDto.getUserPw()); // 비밀번호 암호화
-        String userAuth = SystemUserRoleEnum.USER.getAuthority(); // 일반 회원만 가입이 가능하도록 설정
+        String requestDtoUserAuth = requestDto.getUserAuth();
+        String userAuth;
+        if (requestDtoUserAuth.equals("admin")) {
+            userAuth = SystemUserRoleEnum.ADMIN.getAuthority();
+        } else {
+            userAuth = SystemUserRoleEnum.USER.getAuthority();
+        }
 
         SystemUser systemUser = new SystemUser(userId, userPw, userNm, userAuth);
         SystemUser savedSystemUser = systemUserRepository.save(systemUser); // 유저 정보 저장
