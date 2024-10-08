@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const userNm = document.getElementById('userNm').value.trim();
             const userId = document.getElementById('userId').value.trim();
             const userPw = document.getElementById('userPw').value;
+            const userAuth = "user";
 
             // 입력값 검증
             if (!userId || !userPw || !userNm) {
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ userId, userPw, userNm })
+                    body: JSON.stringify({ userId, userPw, userNm, userAuth })
                 });
 
                 if (response.ok) {
