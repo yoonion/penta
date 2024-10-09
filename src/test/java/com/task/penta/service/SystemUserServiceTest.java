@@ -16,6 +16,7 @@ class SystemUserServiceTest {
     private SystemUserService systemUserService;
 
     private static final String CLIENT_IP = "127.0.0.1";
+    private static final String REQUEST_URL = "http://example.com";
 
     @Test
     @DisplayName("일반 회원 생성 테스트")
@@ -29,7 +30,7 @@ class SystemUserServiceTest {
                         "테스트일반회원",
                         "user"
                 );
-        UserCreateResponseDto savedNormalUser = systemUserService.createUser(requestDto, CLIENT_IP);
+        UserCreateResponseDto savedNormalUser = systemUserService.createUser(requestDto, CLIENT_IP, REQUEST_URL);
 
         // 검증
         assertThat(savedNormalUser.getUserId()).isEqualTo("usertest");
@@ -50,7 +51,7 @@ class SystemUserServiceTest {
                         "admin"
                 );
 
-        UserCreateResponseDto savedAdminUser = systemUserService.createUser(requestDto, CLIENT_IP);
+        UserCreateResponseDto savedAdminUser = systemUserService.createUser(requestDto, CLIENT_IP, REQUEST_URL);
 
         // 검증
         assertThat(savedAdminUser.getUserId()).isEqualTo("admintest");
