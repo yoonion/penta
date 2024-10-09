@@ -67,7 +67,7 @@ class SystemUserServiceTest {
         // 일반 회원 생성
         UserCreateRequestDto requestDto1 =
                 new UserCreateRequestDto(
-                        "usertest",
+                        "usertest55",
                         "1234",
                         "테스트일반회원",
                         "user"
@@ -80,7 +80,7 @@ class SystemUserServiceTest {
         // 중복 회원 생성
         UserCreateRequestDto requestDto2 =
                 new UserCreateRequestDto(
-                        "usertest",
+                        "usertest55",
                         "1234",
                         "테스트일반회원",
                         "user"
