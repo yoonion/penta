@@ -26,6 +26,25 @@ registerBtn.addEventListener('click', function(event) {
             window.location.href = '/user/login'; // 가입 성공 시, 로그인 페이지로 리다이렉트
         })
         .catch(error => {
+            displayErrors(error.errors);
             alert('회원 가입에 실패했습니다: ' + error.message);
         });
 });
+
+function displayErrors(errors) {
+    // 기존 오류 메시지 초기화
+    const errorElements = document.querySelectorAll('.error-message');
+    errorElements.forEach(element => {
+        element.textContent = '';
+    });
+
+    // 새로운 오류 메시지 표시
+    for (const [field, message] of Object.entries(errors)) {
+        const errorElement = document.getElementById(`${field}-error`);
+        if (errorElement) {
+            errorElement.textContent = message;
+        }
+    }
+}
+
+

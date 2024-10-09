@@ -20,13 +20,13 @@ function callApi(url, method, body = null) {
 
     return fetch(url, options)
         .then(response => {
-            if (response.ok) {
-                return response.json(); // 성공 시 JSON 응답 처리
-            } else {
-                return response.json().then(data => {
-                    throw new Error(data.message || 'API 요청 실패');
-                });
-            }
+            return response.json().then(data => {
+                if (response.ok) {
+                    return data; // 성공 시 JSON 응답 처리
+                } else {
+                    throw data; // 서버에서 반환한 전체 오류 데이터를 던집니다.
+                }
+            });
         })
         .catch(error => {
             console.error('API 요청 오류:', error);
