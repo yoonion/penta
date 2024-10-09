@@ -116,6 +116,14 @@ public class JwtUtil {
         }
         return null;
     }
+
+    // 쿠키 삭제
+    public void removeTokenToResponse(HttpServletResponse res) {
+        Cookie cookie = new Cookie(AUTHORIZATION_HEADER, null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        res.addCookie(cookie);
+    }
 }
 
 
