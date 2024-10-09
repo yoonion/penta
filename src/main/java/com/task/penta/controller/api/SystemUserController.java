@@ -1,7 +1,6 @@
 package com.task.penta.controller.api;
 
 import com.task.penta.common.ApiResponse;
-import com.task.penta.common.CommonUtil;
 import com.task.penta.dto.request.UserCreateRequestDto;
 import com.task.penta.dto.request.UserUpdateRequestDto;
 import com.task.penta.dto.response.UserCreateResponseDto;
@@ -15,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.task.penta.common.CommonUtil.getClientIp;
+import static com.task.penta.common.CommonUtil.getRequestUrl;
 
 @RestController
 @RequiredArgsConstructor
@@ -101,15 +103,5 @@ public class SystemUserController {
         UserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, clientIp, requestUrl);
 
         return ApiResponse.createSuccess(deletedUser);
-    }
-
-    // 클라이언트 ip 가져오기
-    private static String getClientIp(HttpServletRequest request) {
-        return CommonUtil.getClientIp(request);
-    }
-
-    // 클라이언트 requestUrl 가져오기
-    private static String getRequestUrl(HttpServletRequest request) {
-        return CommonUtil.getRequestUrl(request);
     }
 }
