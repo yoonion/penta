@@ -62,6 +62,12 @@ public class WebSecurityConfig {
         return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
     }
 
+    // HTTP METHOD 허용 filter
+    @Bean
+    public HttpMethodFilter httpMethodFilter() {
+        return new HttpMethodFilter();
+    }
+
     // 인증 (Authentication) 실패 핸들러
     @Bean
     public AuthenticationEntryPoint entryPoint() {
@@ -150,6 +156,8 @@ public class WebSecurityConfig {
         // security filter chain 순서 설정 - 구현한 인증 및 인가 filter 순서를 설정
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(httpMethodFilter(), JwtAuthorizationFilter.class); // http method 제한
+
     }
 
 }
