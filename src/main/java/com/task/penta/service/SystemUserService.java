@@ -1,6 +1,5 @@
 package com.task.penta.service;
 
-import com.task.penta.common.CommonUtil;
 import com.task.penta.dto.request.UserCreateRequestDto;
 import com.task.penta.dto.request.UserUpdateRequestDto;
 import com.task.penta.dto.response.UserCreateResponseDto;
@@ -15,7 +14,6 @@ import com.task.penta.exception.CustomException;
 import com.task.penta.exception.ErrorCode;
 import com.task.penta.repository.SystemUserRepository;
 import com.task.penta.repository.UserHistoryRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

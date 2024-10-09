@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Slf4j(topic = "JWT 검증 및 인가")
+@Slf4j(topic = "JWT 검증 및 인가 (JwtAuthorizationFilter)")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -34,10 +34,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
             // JWT 토큰 substring
             tokenValue = jwtUtil.substringToken(tokenValue);
-            // log.info(tokenValue);
 
             if (!jwtUtil.validateToken(tokenValue)) {
-                log.error("Token Error");
+                log.error("Invalidate Token Error");
                 jwtUtil.removeTokenToResponse(response); // 유효하지 않은 JWT 쿠키 제거
 
                 // api 요청 일 경우, json 응답
