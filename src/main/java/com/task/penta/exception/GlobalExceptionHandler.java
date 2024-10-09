@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
     // Interval exception
     @ExceptionHandler
     public ResponseEntity<ApiResponse<?>> handleExceptions(Exception e) {
+        log.error(e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.createFail(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), null));
