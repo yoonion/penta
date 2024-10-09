@@ -17,6 +17,7 @@ import com.task.penta.repository.SystemUserRepository;
 import com.task.penta.repository.UserHistoryRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j(topic = "SystemUserService")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SystemUserService {
@@ -64,7 +66,7 @@ public class SystemUserService {
     }
 
     @Transactional
-    public UserCreateResponseDto createUser(UserCreateRequestDto requestDto, String clientIp) {
+    public UserCreateResponseDto createUser(UserCreateRequestDto requestDto, String clientIp, String requestUrl) {
         // 아이디 중복 검증
         String userId = requestDto.getUserId();
         if (systemUserRepository.existsByUserId(userId)) {
@@ -84,37 +86,46 @@ public class SystemUserService {
         SystemUser systemUser = new SystemUser(userId, userPw, userNm, userAuth);
         SystemUser savedSystemUser = systemUserRepository.save(systemUser); // 유저 정보 저장
 
-        // 히스토리 저장
-        saveUserHistory("", ActionTypeEnum.C, savedSystemUser, clientIp);
+        trySaveUserHistory(clientIp, requestUrl, ActionTypeEnum.C, savedSystemUser); // 히스토리 저장
 
         return new UserCreateResponseDto(savedSystemUser);
     }
 
     @Transactional
-    public UserUpdateResponseDto updateUser(String userId, UserUpdateRequestDto requestDto, String clientIp) {
+    public UserUpdateResponseDto updateUser(String userId, UserUpdateRequestDto requestDto, String clientIp, String requestUrl) {
         SystemUser findUser = findByUserId(userId);
 
         // 회원 이름 수정
         findUser.updateUserName(requestDto.getUserNm()); // 더티 체킹 - 자동으로 update 쿼리 발생한다.
 
-        // 히스토리 저장
-        saveUserHistory("", ActionTypeEnum.U, findUser, clientIp);
+        trySaveUserHistory(clientIp, requestUrl, ActionTypeEnum.U, findUser); // 히스토리 저장
 
         return new UserUpdateResponseDto(findUser);
     }
 
     @Transactional
-    public UserDeleteResponseDto deleteUser(String userId, String clientIp) {
+    public UserDeleteResponseDto deleteUser(String userId, String clientIp, String requestUrl) {
         // 존재하는 회원인지 확인
         SystemUser findUser = findByUserId(userId);
         systemUserRepository.deleteByUserId(findUser.getUserId());
 
-        saveUserHistory("", ActionTypeEnum.D, findUser, clientIp);
+        trySaveUserHistory(clientIp, requestUrl, ActionTypeEnum.D, findUser); // 히스토리 저장
 
         return new UserDeleteResponseDto(userId);
     }
 
-    // 회원 추가(C), 수정(U), 삭제(D)에 따른 히스토리 기록. 추후 다른 서비스에서 사용한다면, service 계층으로 분리시켜 재사용 고려.
+    // 히스토리 저장 - 히스토리 저장이 실패하더라도, try-catch 로 핸들링하여 같은 트랜잭션에 있는 C,U,D 로직은 실행되도록 하고 로그를 기록한다.
+    private void trySaveUserHistory(String clientIp, String requestUrl, ActionTypeEnum actionType, SystemUser user) {
+        try {
+            saveUserHistory(requestUrl, actionType, user, clientIp);
+        } catch (Exception e) {
+            // 히스토리 저장 실패 시 상세 로그 남기기
+            log.error("히스토리 저장 실패 - requestUrl={}, userId={}, actionType={}, clientIp={}, errorMessage={}",
+                    requestUrl, user.getUserId(), actionType, clientIp, e.getMessage());
+        }
+    }
+
+    // 회원 추가(C), 수정(U), 삭제(D)에 따른 히스토리 기록
     private void saveUserHistory(String url, ActionTypeEnum actionType, SystemUser findUser, String clientIp) {
         UserHistory userHistory = UserHistory.builder()
                 .url(url)

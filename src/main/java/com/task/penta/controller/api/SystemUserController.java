@@ -64,7 +64,8 @@ public class SystemUserController {
             @Valid @RequestBody UserCreateRequestDto requestDto,
             HttpServletRequest request) {
         String clientIp = getClientIp(request);
-        UserCreateResponseDto createdUser = systemUserService.createUser(requestDto, clientIp);
+        String requestUrl = getRequestUrl(request);
+        UserCreateResponseDto createdUser = systemUserService.createUser(requestDto, clientIp, requestUrl);
 
         return ApiResponse.createSuccess(createdUser);
     }
@@ -81,7 +82,8 @@ public class SystemUserController {
             @Valid @RequestBody UserUpdateRequestDto requestDto,
             HttpServletRequest request) {
         String clientIp = getClientIp(request);
-        UserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto, clientIp);
+        String requestUrl = getRequestUrl(request);
+        UserUpdateResponseDto updatedUser = systemUserService.updateUser(userId, requestDto, clientIp, requestUrl);
 
         return ApiResponse.createSuccess(updatedUser);
     }
@@ -95,7 +97,8 @@ public class SystemUserController {
     public ApiResponse<UserDeleteResponseDto> deleteUser(
             @PathVariable String userId, HttpServletRequest request) {
         String clientIp = getClientIp(request);
-        UserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, clientIp);
+        String requestUrl = getRequestUrl(request);
+        UserDeleteResponseDto deletedUser = systemUserService.deleteUser(userId, clientIp, requestUrl);
 
         return ApiResponse.createSuccess(deletedUser);
     }
@@ -103,5 +106,10 @@ public class SystemUserController {
     // 클라이언트 ip 가져오기
     private static String getClientIp(HttpServletRequest request) {
         return CommonUtil.getClientIp(request);
+    }
+
+    // 클라이언트 requestUrl 가져오기
+    private static String getRequestUrl(HttpServletRequest request) {
+        return CommonUtil.getRequestUrl(request);
     }
 }
