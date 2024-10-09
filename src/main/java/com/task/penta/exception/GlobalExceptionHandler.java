@@ -1,6 +1,8 @@
 package com.task.penta.exception;
 
 import com.task.penta.common.ApiResponse;
+import com.task.penta.common.CommonUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +54,18 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.createFail(errorCode.getMessage(), null));
     }
 
-    // 405 Method Not Allowed / 요청 가능한 http method 외 요청이 왔을 경우
+    // 405 Method Not Allowed / 불가능한 http method 요청이 왔을 경우
     @ExceptionHandler
-    public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException e,
+            HttpServletRequest request) {
+
+        // 로그
+        log.warn("HTTP Method Not Allowed. URL: {}, Method: {}, Client IP: {}",
+                CommonUtil.getRequestUrl(request),
+                CommonUtil.getClientIp(request),
+                request.getMethod());
+
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(ApiResponse.createFail(ErrorCode.HTTP_METHOD_NOT_ALLOWED.getMessage(), null));
